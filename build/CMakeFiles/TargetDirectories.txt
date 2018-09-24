@@ -1,0 +1,3 @@
+/home/pradeep/Desktop/ARMISA/armisa/build/CMakeFiles/edit_cache.dir
+/home/pradeep/Desktop/ARMISA/armisa/build/CMakeFiles/rebuild_cache.dir
+/home/pradeep/Desktop/ARMISA/armisa/build/CMakeFiles/armisa.dir

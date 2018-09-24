@@ -1,0 +1,1 @@
+/usr/bin/c++    -g    CMakeFiles/ProcessorBus_example.dir/ProcessorBus_example.cpp.o  -o ProcessorBus_example  -L/usr/local/systemc/lib-linux64  -L/home/pradeep/Desktop/systemc_test/BUS/examples/Blocking/../../build -lsystemc -lProcessorBus -Wl,-rpath,/usr/local/systemc/lib-linux64:/home/pradeep/Desktop/systemc_test/BUS/examples/Blocking/../../build 

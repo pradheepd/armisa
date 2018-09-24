@@ -1,0 +1,3 @@
+/home/pradeep/Desktop/systemc_test/BUS/build/CMakeFiles/edit_cache.dir
+/home/pradeep/Desktop/systemc_test/BUS/build/CMakeFiles/rebuild_cache.dir
+/home/pradeep/Desktop/systemc_test/BUS/build/CMakeFiles/ProcessorBus.dir

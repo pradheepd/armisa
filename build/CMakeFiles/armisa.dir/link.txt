@@ -1,0 +1,1 @@
+/usr/bin/c++    -g    CMakeFiles/armisa.dir/ARMISA_M0p.cpp.o  -o armisa  -L/usr/local/systemc/lib-linux64 -lsystemc -Wl,-rpath,/usr/local/systemc/lib-linux64 

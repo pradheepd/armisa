@@ -1,0 +1,2 @@
+/usr/bin/ar qc libProcessorBus.a  CMakeFiles/ProcessorBus.dir/src/SimpleInitTarg.cpp.o CMakeFiles/ProcessorBus.dir/src/BusTop.cpp.o CMakeFiles/ProcessorBus.dir/src/BusMaster.cpp.o CMakeFiles/ProcessorBus.dir/src/BusSlave.cpp.o
+/usr/bin/ranlib libProcessorBus.a

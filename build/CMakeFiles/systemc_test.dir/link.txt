@@ -1,0 +1,1 @@
+/usr/bin/c++      CMakeFiles/systemc_test.dir/ARMISA_M0p.cpp.o  -o systemc_test  -L/usr/local/systemc/lib-linux64 -lsystemc -lncurses -Wl,-rpath,/usr/local/systemc/lib-linux64 
