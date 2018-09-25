@@ -123,32 +123,113 @@ armisa/fast:
 	$(MAKE) -f CMakeFiles/armisa.dir/build.make CMakeFiles/armisa.dir/build
 .PHONY : armisa/fast
 
-ARMISA_M0p.o: ARMISA_M0p.cpp.o
+Flash/FlashMem.o: Flash/FlashMem.cpp.o
 
-.PHONY : ARMISA_M0p.o
+.PHONY : Flash/FlashMem.o
 
 # target to build an object file
-ARMISA_M0p.cpp.o:
-	$(MAKE) -f CMakeFiles/armisa.dir/build.make CMakeFiles/armisa.dir/ARMISA_M0p.cpp.o
-.PHONY : ARMISA_M0p.cpp.o
+Flash/FlashMem.cpp.o:
+	$(MAKE) -f CMakeFiles/armisa.dir/build.make CMakeFiles/armisa.dir/Flash/FlashMem.cpp.o
+.PHONY : Flash/FlashMem.cpp.o
 
-ARMISA_M0p.i: ARMISA_M0p.cpp.i
+Flash/FlashMem.i: Flash/FlashMem.cpp.i
 
-.PHONY : ARMISA_M0p.i
+.PHONY : Flash/FlashMem.i
 
 # target to preprocess a source file
-ARMISA_M0p.cpp.i:
-	$(MAKE) -f CMakeFiles/armisa.dir/build.make CMakeFiles/armisa.dir/ARMISA_M0p.cpp.i
-.PHONY : ARMISA_M0p.cpp.i
+Flash/FlashMem.cpp.i:
+	$(MAKE) -f CMakeFiles/armisa.dir/build.make CMakeFiles/armisa.dir/Flash/FlashMem.cpp.i
+.PHONY : Flash/FlashMem.cpp.i
 
-ARMISA_M0p.s: ARMISA_M0p.cpp.s
+Flash/FlashMem.s: Flash/FlashMem.cpp.s
 
-.PHONY : ARMISA_M0p.s
+.PHONY : Flash/FlashMem.s
 
 # target to generate assembly for a file
-ARMISA_M0p.cpp.s:
-	$(MAKE) -f CMakeFiles/armisa.dir/build.make CMakeFiles/armisa.dir/ARMISA_M0p.cpp.s
-.PHONY : ARMISA_M0p.cpp.s
+Flash/FlashMem.cpp.s:
+	$(MAKE) -f CMakeFiles/armisa.dir/build.make CMakeFiles/armisa.dir/Flash/FlashMem.cpp.s
+.PHONY : Flash/FlashMem.cpp.s
+
+Processor/ARMISA.o: Processor/ARMISA.cpp.o
+
+.PHONY : Processor/ARMISA.o
+
+# target to build an object file
+Processor/ARMISA.cpp.o:
+	$(MAKE) -f CMakeFiles/armisa.dir/build.make CMakeFiles/armisa.dir/Processor/ARMISA.cpp.o
+.PHONY : Processor/ARMISA.cpp.o
+
+Processor/ARMISA.i: Processor/ARMISA.cpp.i
+
+.PHONY : Processor/ARMISA.i
+
+# target to preprocess a source file
+Processor/ARMISA.cpp.i:
+	$(MAKE) -f CMakeFiles/armisa.dir/build.make CMakeFiles/armisa.dir/Processor/ARMISA.cpp.i
+.PHONY : Processor/ARMISA.cpp.i
+
+Processor/ARMISA.s: Processor/ARMISA.cpp.s
+
+.PHONY : Processor/ARMISA.s
+
+# target to generate assembly for a file
+Processor/ARMISA.cpp.s:
+	$(MAKE) -f CMakeFiles/armisa.dir/build.make CMakeFiles/armisa.dir/Processor/ARMISA.cpp.s
+.PHONY : Processor/ARMISA.cpp.s
+
+Processor/Thumbisa.o: Processor/Thumbisa.cpp.o
+
+.PHONY : Processor/Thumbisa.o
+
+# target to build an object file
+Processor/Thumbisa.cpp.o:
+	$(MAKE) -f CMakeFiles/armisa.dir/build.make CMakeFiles/armisa.dir/Processor/Thumbisa.cpp.o
+.PHONY : Processor/Thumbisa.cpp.o
+
+Processor/Thumbisa.i: Processor/Thumbisa.cpp.i
+
+.PHONY : Processor/Thumbisa.i
+
+# target to preprocess a source file
+Processor/Thumbisa.cpp.i:
+	$(MAKE) -f CMakeFiles/armisa.dir/build.make CMakeFiles/armisa.dir/Processor/Thumbisa.cpp.i
+.PHONY : Processor/Thumbisa.cpp.i
+
+Processor/Thumbisa.s: Processor/Thumbisa.cpp.s
+
+.PHONY : Processor/Thumbisa.s
+
+# target to generate assembly for a file
+Processor/Thumbisa.cpp.s:
+	$(MAKE) -f CMakeFiles/armisa.dir/build.make CMakeFiles/armisa.dir/Processor/Thumbisa.cpp.s
+.PHONY : Processor/Thumbisa.cpp.s
+
+SRAM/SRAMMem.o: SRAM/SRAMMem.cpp.o
+
+.PHONY : SRAM/SRAMMem.o
+
+# target to build an object file
+SRAM/SRAMMem.cpp.o:
+	$(MAKE) -f CMakeFiles/armisa.dir/build.make CMakeFiles/armisa.dir/SRAM/SRAMMem.cpp.o
+.PHONY : SRAM/SRAMMem.cpp.o
+
+SRAM/SRAMMem.i: SRAM/SRAMMem.cpp.i
+
+.PHONY : SRAM/SRAMMem.i
+
+# target to preprocess a source file
+SRAM/SRAMMem.cpp.i:
+	$(MAKE) -f CMakeFiles/armisa.dir/build.make CMakeFiles/armisa.dir/SRAM/SRAMMem.cpp.i
+.PHONY : SRAM/SRAMMem.cpp.i
+
+SRAM/SRAMMem.s: SRAM/SRAMMem.cpp.s
+
+.PHONY : SRAM/SRAMMem.s
+
+# target to generate assembly for a file
+SRAM/SRAMMem.cpp.s:
+	$(MAKE) -f CMakeFiles/armisa.dir/build.make CMakeFiles/armisa.dir/SRAM/SRAMMem.cpp.s
+.PHONY : SRAM/SRAMMem.cpp.s
 
 # Help Target
 help:
@@ -159,9 +240,18 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... armisa"
-	@echo "... ARMISA_M0p.o"
-	@echo "... ARMISA_M0p.i"
-	@echo "... ARMISA_M0p.s"
+	@echo "... Flash/FlashMem.o"
+	@echo "... Flash/FlashMem.i"
+	@echo "... Flash/FlashMem.s"
+	@echo "... Processor/ARMISA.o"
+	@echo "... Processor/ARMISA.i"
+	@echo "... Processor/ARMISA.s"
+	@echo "... Processor/Thumbisa.o"
+	@echo "... Processor/Thumbisa.i"
+	@echo "... Processor/Thumbisa.s"
+	@echo "... SRAM/SRAMMem.o"
+	@echo "... SRAM/SRAMMem.i"
+	@echo "... SRAM/SRAMMem.s"
 .PHONY : help
 
 

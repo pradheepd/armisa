@@ -57,41 +57,119 @@ include CMakeFiles/armisa.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/armisa.dir/flags.make
 
-CMakeFiles/armisa.dir/ARMISA_M0p.cpp.o: CMakeFiles/armisa.dir/flags.make
-CMakeFiles/armisa.dir/ARMISA_M0p.cpp.o: ../ARMISA_M0p.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pradeep/Desktop/ARMISA/armisa/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/armisa.dir/ARMISA_M0p.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/armisa.dir/ARMISA_M0p.cpp.o -c /home/pradeep/Desktop/ARMISA/armisa/ARMISA_M0p.cpp
+CMakeFiles/armisa.dir/Processor/ARMISA.cpp.o: CMakeFiles/armisa.dir/flags.make
+CMakeFiles/armisa.dir/Processor/ARMISA.cpp.o: ../Processor/ARMISA.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pradeep/Desktop/ARMISA/armisa/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/armisa.dir/Processor/ARMISA.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/armisa.dir/Processor/ARMISA.cpp.o -c /home/pradeep/Desktop/ARMISA/armisa/Processor/ARMISA.cpp
 
-CMakeFiles/armisa.dir/ARMISA_M0p.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/armisa.dir/ARMISA_M0p.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/pradeep/Desktop/ARMISA/armisa/ARMISA_M0p.cpp > CMakeFiles/armisa.dir/ARMISA_M0p.cpp.i
+CMakeFiles/armisa.dir/Processor/ARMISA.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/armisa.dir/Processor/ARMISA.cpp.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/pradeep/Desktop/ARMISA/armisa/Processor/ARMISA.cpp > CMakeFiles/armisa.dir/Processor/ARMISA.cpp.i
 
-CMakeFiles/armisa.dir/ARMISA_M0p.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/armisa.dir/ARMISA_M0p.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/pradeep/Desktop/ARMISA/armisa/ARMISA_M0p.cpp -o CMakeFiles/armisa.dir/ARMISA_M0p.cpp.s
+CMakeFiles/armisa.dir/Processor/ARMISA.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/armisa.dir/Processor/ARMISA.cpp.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/pradeep/Desktop/ARMISA/armisa/Processor/ARMISA.cpp -o CMakeFiles/armisa.dir/Processor/ARMISA.cpp.s
 
-CMakeFiles/armisa.dir/ARMISA_M0p.cpp.o.requires:
+CMakeFiles/armisa.dir/Processor/ARMISA.cpp.o.requires:
 
-.PHONY : CMakeFiles/armisa.dir/ARMISA_M0p.cpp.o.requires
+.PHONY : CMakeFiles/armisa.dir/Processor/ARMISA.cpp.o.requires
 
-CMakeFiles/armisa.dir/ARMISA_M0p.cpp.o.provides: CMakeFiles/armisa.dir/ARMISA_M0p.cpp.o.requires
-	$(MAKE) -f CMakeFiles/armisa.dir/build.make CMakeFiles/armisa.dir/ARMISA_M0p.cpp.o.provides.build
-.PHONY : CMakeFiles/armisa.dir/ARMISA_M0p.cpp.o.provides
+CMakeFiles/armisa.dir/Processor/ARMISA.cpp.o.provides: CMakeFiles/armisa.dir/Processor/ARMISA.cpp.o.requires
+	$(MAKE) -f CMakeFiles/armisa.dir/build.make CMakeFiles/armisa.dir/Processor/ARMISA.cpp.o.provides.build
+.PHONY : CMakeFiles/armisa.dir/Processor/ARMISA.cpp.o.provides
 
-CMakeFiles/armisa.dir/ARMISA_M0p.cpp.o.provides.build: CMakeFiles/armisa.dir/ARMISA_M0p.cpp.o
+CMakeFiles/armisa.dir/Processor/ARMISA.cpp.o.provides.build: CMakeFiles/armisa.dir/Processor/ARMISA.cpp.o
+
+
+CMakeFiles/armisa.dir/Processor/Thumbisa.cpp.o: CMakeFiles/armisa.dir/flags.make
+CMakeFiles/armisa.dir/Processor/Thumbisa.cpp.o: ../Processor/Thumbisa.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pradeep/Desktop/ARMISA/armisa/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/armisa.dir/Processor/Thumbisa.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/armisa.dir/Processor/Thumbisa.cpp.o -c /home/pradeep/Desktop/ARMISA/armisa/Processor/Thumbisa.cpp
+
+CMakeFiles/armisa.dir/Processor/Thumbisa.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/armisa.dir/Processor/Thumbisa.cpp.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/pradeep/Desktop/ARMISA/armisa/Processor/Thumbisa.cpp > CMakeFiles/armisa.dir/Processor/Thumbisa.cpp.i
+
+CMakeFiles/armisa.dir/Processor/Thumbisa.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/armisa.dir/Processor/Thumbisa.cpp.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/pradeep/Desktop/ARMISA/armisa/Processor/Thumbisa.cpp -o CMakeFiles/armisa.dir/Processor/Thumbisa.cpp.s
+
+CMakeFiles/armisa.dir/Processor/Thumbisa.cpp.o.requires:
+
+.PHONY : CMakeFiles/armisa.dir/Processor/Thumbisa.cpp.o.requires
+
+CMakeFiles/armisa.dir/Processor/Thumbisa.cpp.o.provides: CMakeFiles/armisa.dir/Processor/Thumbisa.cpp.o.requires
+	$(MAKE) -f CMakeFiles/armisa.dir/build.make CMakeFiles/armisa.dir/Processor/Thumbisa.cpp.o.provides.build
+.PHONY : CMakeFiles/armisa.dir/Processor/Thumbisa.cpp.o.provides
+
+CMakeFiles/armisa.dir/Processor/Thumbisa.cpp.o.provides.build: CMakeFiles/armisa.dir/Processor/Thumbisa.cpp.o
+
+
+CMakeFiles/armisa.dir/Flash/FlashMem.cpp.o: CMakeFiles/armisa.dir/flags.make
+CMakeFiles/armisa.dir/Flash/FlashMem.cpp.o: ../Flash/FlashMem.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pradeep/Desktop/ARMISA/armisa/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/armisa.dir/Flash/FlashMem.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/armisa.dir/Flash/FlashMem.cpp.o -c /home/pradeep/Desktop/ARMISA/armisa/Flash/FlashMem.cpp
+
+CMakeFiles/armisa.dir/Flash/FlashMem.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/armisa.dir/Flash/FlashMem.cpp.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/pradeep/Desktop/ARMISA/armisa/Flash/FlashMem.cpp > CMakeFiles/armisa.dir/Flash/FlashMem.cpp.i
+
+CMakeFiles/armisa.dir/Flash/FlashMem.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/armisa.dir/Flash/FlashMem.cpp.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/pradeep/Desktop/ARMISA/armisa/Flash/FlashMem.cpp -o CMakeFiles/armisa.dir/Flash/FlashMem.cpp.s
+
+CMakeFiles/armisa.dir/Flash/FlashMem.cpp.o.requires:
+
+.PHONY : CMakeFiles/armisa.dir/Flash/FlashMem.cpp.o.requires
+
+CMakeFiles/armisa.dir/Flash/FlashMem.cpp.o.provides: CMakeFiles/armisa.dir/Flash/FlashMem.cpp.o.requires
+	$(MAKE) -f CMakeFiles/armisa.dir/build.make CMakeFiles/armisa.dir/Flash/FlashMem.cpp.o.provides.build
+.PHONY : CMakeFiles/armisa.dir/Flash/FlashMem.cpp.o.provides
+
+CMakeFiles/armisa.dir/Flash/FlashMem.cpp.o.provides.build: CMakeFiles/armisa.dir/Flash/FlashMem.cpp.o
+
+
+CMakeFiles/armisa.dir/SRAM/SRAMMem.cpp.o: CMakeFiles/armisa.dir/flags.make
+CMakeFiles/armisa.dir/SRAM/SRAMMem.cpp.o: ../SRAM/SRAMMem.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/pradeep/Desktop/ARMISA/armisa/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/armisa.dir/SRAM/SRAMMem.cpp.o"
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/armisa.dir/SRAM/SRAMMem.cpp.o -c /home/pradeep/Desktop/ARMISA/armisa/SRAM/SRAMMem.cpp
+
+CMakeFiles/armisa.dir/SRAM/SRAMMem.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/armisa.dir/SRAM/SRAMMem.cpp.i"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/pradeep/Desktop/ARMISA/armisa/SRAM/SRAMMem.cpp > CMakeFiles/armisa.dir/SRAM/SRAMMem.cpp.i
+
+CMakeFiles/armisa.dir/SRAM/SRAMMem.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/armisa.dir/SRAM/SRAMMem.cpp.s"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/pradeep/Desktop/ARMISA/armisa/SRAM/SRAMMem.cpp -o CMakeFiles/armisa.dir/SRAM/SRAMMem.cpp.s
+
+CMakeFiles/armisa.dir/SRAM/SRAMMem.cpp.o.requires:
+
+.PHONY : CMakeFiles/armisa.dir/SRAM/SRAMMem.cpp.o.requires
+
+CMakeFiles/armisa.dir/SRAM/SRAMMem.cpp.o.provides: CMakeFiles/armisa.dir/SRAM/SRAMMem.cpp.o.requires
+	$(MAKE) -f CMakeFiles/armisa.dir/build.make CMakeFiles/armisa.dir/SRAM/SRAMMem.cpp.o.provides.build
+.PHONY : CMakeFiles/armisa.dir/SRAM/SRAMMem.cpp.o.provides
+
+CMakeFiles/armisa.dir/SRAM/SRAMMem.cpp.o.provides.build: CMakeFiles/armisa.dir/SRAM/SRAMMem.cpp.o
 
 
 # Object files for target armisa
 armisa_OBJECTS = \
-"CMakeFiles/armisa.dir/ARMISA_M0p.cpp.o"
+"CMakeFiles/armisa.dir/Processor/ARMISA.cpp.o" \
+"CMakeFiles/armisa.dir/Processor/Thumbisa.cpp.o" \
+"CMakeFiles/armisa.dir/Flash/FlashMem.cpp.o" \
+"CMakeFiles/armisa.dir/SRAM/SRAMMem.cpp.o"
 
 # External object files for target armisa
 armisa_EXTERNAL_OBJECTS =
 
-armisa: CMakeFiles/armisa.dir/ARMISA_M0p.cpp.o
+armisa: CMakeFiles/armisa.dir/Processor/ARMISA.cpp.o
+armisa: CMakeFiles/armisa.dir/Processor/Thumbisa.cpp.o
+armisa: CMakeFiles/armisa.dir/Flash/FlashMem.cpp.o
+armisa: CMakeFiles/armisa.dir/SRAM/SRAMMem.cpp.o
 armisa: CMakeFiles/armisa.dir/build.make
 armisa: CMakeFiles/armisa.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/pradeep/Desktop/ARMISA/armisa/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable armisa"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/pradeep/Desktop/ARMISA/armisa/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking CXX executable armisa"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/armisa.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -99,7 +177,10 @@ CMakeFiles/armisa.dir/build: armisa
 
 .PHONY : CMakeFiles/armisa.dir/build
 
-CMakeFiles/armisa.dir/requires: CMakeFiles/armisa.dir/ARMISA_M0p.cpp.o.requires
+CMakeFiles/armisa.dir/requires: CMakeFiles/armisa.dir/Processor/ARMISA.cpp.o.requires
+CMakeFiles/armisa.dir/requires: CMakeFiles/armisa.dir/Processor/Thumbisa.cpp.o.requires
+CMakeFiles/armisa.dir/requires: CMakeFiles/armisa.dir/Flash/FlashMem.cpp.o.requires
+CMakeFiles/armisa.dir/requires: CMakeFiles/armisa.dir/SRAM/SRAMMem.cpp.o.requires
 
 .PHONY : CMakeFiles/armisa.dir/requires
 

@@ -1,1 +1,1 @@
-/usr/bin/c++    -g    CMakeFiles/armisa.dir/ARMISA_M0p.cpp.o  -o armisa  -L/usr/local/systemc/lib-linux64 -lsystemc -Wl,-rpath,/usr/local/systemc/lib-linux64 
+/usr/bin/c++    -g    CMakeFiles/armisa.dir/Processor/ARMISA.cpp.o CMakeFiles/armisa.dir/Processor/Thumbisa.cpp.o CMakeFiles/armisa.dir/Flash/FlashMem.cpp.o CMakeFiles/armisa.dir/SRAM/SRAMMem.cpp.o  -o armisa  -L/usr/local/systemc/lib-linux64  -L/home/pradeep/Desktop/ARMISA/armisa/BUS/build -lsystemc -lProcessorBus -Wl,-rpath,/usr/local/systemc/lib-linux64:/home/pradeep/Desktop/ARMISA/armisa/BUS/build 

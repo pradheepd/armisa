@@ -6,15 +6,47 @@
 
 #IncludeRegexTransform: 
 
-/home/pradeep/Desktop/ARMISA/armisa/ARMISA_M0p.cpp
+../include/ARM_CORE.h
 systemc.h
-/home/pradeep/Desktop/ARMISA/armisa/systemc.h
-fstream
-/home/pradeep/Desktop/ARMISA/armisa/fstream
-ThumbDefs.h
-/home/pradeep/Desktop/ARMISA/armisa/ThumbDefs.h
+../include/systemc.h
+ProcessorBus.h
+../include/ProcessorBus.h
 
-/home/pradeep/Desktop/ARMISA/armisa/ThumbDefs.h
+../include/PeripheralDefs.h
+ProcessorBus.h
+../include/ProcessorBus.h
+
+../include/ProcessorBus.h
+systemc.h
+../include/systemc.h
+
+../include/ThumbDefs.h
+
+/home/pradeep/Desktop/ARMISA/armisa/Flash/FlashMem.cpp
+systemc.h
+/home/pradeep/Desktop/ARMISA/armisa/Flash/systemc.h
+PeripheralDefs.h
+/home/pradeep/Desktop/ARMISA/armisa/Flash/PeripheralDefs.h
+
+/home/pradeep/Desktop/ARMISA/armisa/Processor/ARMISA.cpp
+systemc.h
+/home/pradeep/Desktop/ARMISA/armisa/Processor/systemc.h
+fstream
+/home/pradeep/Desktop/ARMISA/armisa/Processor/fstream
+ARM_CORE.h
+/home/pradeep/Desktop/ARMISA/armisa/Processor/ARM_CORE.h
+
+/home/pradeep/Desktop/ARMISA/armisa/Processor/Thumbisa.cpp
+ARM_CORE.h
+/home/pradeep/Desktop/ARMISA/armisa/Processor/ARM_CORE.h
+ThumbDefs.h
+/home/pradeep/Desktop/ARMISA/armisa/Processor/ThumbDefs.h
+
+/home/pradeep/Desktop/ARMISA/armisa/SRAM/SRAMMem.cpp
+systemc.h
+/home/pradeep/Desktop/ARMISA/armisa/SRAM/systemc.h
+PeripheralDefs.h
+/home/pradeep/Desktop/ARMISA/armisa/SRAM/PeripheralDefs.h
 
 /usr/local/systemc/include/sysc/communication/sc_buffer.h
 sysc/communication/sc_signal.h

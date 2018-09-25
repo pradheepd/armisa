@@ -1,5 +1,8 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/armisa.dir/ARMISA_M0p.cpp.o"
+  "CMakeFiles/armisa.dir/Processor/ARMISA.cpp.o"
+  "CMakeFiles/armisa.dir/Processor/Thumbisa.cpp.o"
+  "CMakeFiles/armisa.dir/Flash/FlashMem.cpp.o"
+  "CMakeFiles/armisa.dir/SRAM/SRAMMem.cpp.o"
   "armisa.pdb"
   "armisa"
 )

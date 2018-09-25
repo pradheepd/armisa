@@ -6,10 +6,12 @@ project(armisa)
 
 include_directories("/usr/local/systemc/include/")
 
-include_directories("{CMAKE_CURRENT_LIST_DIR}")
+include_directories("${CMAKE_CURRENT_LIST_DIR}/include")
 
 link_directories("/usr/local/systemc/lib-linux64/")
 
-add_executable(armisa  ARMISA_M0p.cpp )
+link_directories("${CMAKE_CURRENT_LIST_DIR}/BUS/build")
 
-target_link_libraries( armisa systemc )
+add_executable(armisa  Processor/ARMISA.cpp Processor/Thumbisa.cpp Flash/FlashMem.cpp SRAM/SRAMMem.cpp)
+
+target_link_libraries( armisa systemc ProcessorBus)

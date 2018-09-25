@@ -1,157 +1,8 @@
 #include "systemc.h"
 #include "fstream"
-#include "ThumbDefs.h"
+#include "ARM_CORE.h"
 
-// flash size in kbs
-#define FLASH_SIZE  64 * 1024
-
-// sram size in kbs
-#define SRAM_SIZE   20 * 1024
-
-//flash start address
-#define FLASH_START_ADDR    0x00000000
-
-//sram start address
-#define SRAM_START_ADDR     0x20000000
-
-// cpu destination mask
-#define DST_MASK_R0         0b0000
-#define DST_MASK_R1         0b0001
-#define DST_MASK_R2         0b0010
-#define DST_MASK_R3         0b0011
-#define DST_MASK_R4         0b0100
-#define DST_MASK_R5         0b0101
-#define DST_MASK_R6         0b0110
-#define DST_MASK_R7         0b0111
-#define DST_MASK_R8         0b1000
-#define DST_MASK_R9         0b1001
-#define DST_MASK_R10        0b1010
-#define DST_MASK_R11        0b1011
-#define DST_MASK_R12        0b1100
-#define DST_MASK_SP         0b1101
-#define DST_MASK_LR         0b1110
-#define DST_MASK_PC         0b1111
-#define DST_MASK_INST       0b10000
-#define DST_MASK_IMMI       0b10001
-
-#define SHIFT_MASK          0x00000ff0
-
-#define RMREG_MASK          0x0000000f
-
-#define RNREG_MASK          0x000f0000
-
-#define RDREG_MASK          0x0000f000
-
-#define IMMI_MASK           0x000000ff
-
-#define ROT_MASK            0x00000f00
-
-#define BX_MASK             0x0ffffff0
-
-#define BWL_MASK            0x00ffffff
-
-#define MRS_MASK            0x0fff0000
-
-#define MSR_MASK            0x0ffff000
-
-// check macros for NZCV bits in APSR
-#define IS_NSET() (((CPSR & 0x80000000 ) == 0x80000000)?true:false)
-#define IS_NCLR() (((CPSR & 0x80000000 ) != 0x80000000)?true:false)
-#define NSET() ( CPSR = CPSR | 0x80000000 )
-#define NCLR() ( CPSR = CPSR & 0x8FFFFFFF )
-
-#define IS_ZSET() (((CPSR & 0x40000000 ) == 0x40000000)?true:false)
-#define IS_ZCLR() (((CPSR & 0x40000000 ) != 0x40000000)?true:false)
-#define ZSET() ( CPSR = CPSR | 0x40000000 )
-#define ZCLR() ( CPSR = CPSR & 0xBFFFFFFF )
-
-#define IS_CSET() (((CPSR & 0x20000000 ) == 0x20000000)?true:false)
-#define IS_CCLR() (((CPSR & 0x20000000 ) != 0x20000000)?true:false)
-#define CSET() ( CPSR = CPSR | 0x20000000 )
-#define CCLR() ( CPSR = CPSR & 0xDFFFFFFF )
-
-#define IS_VSET() (((CPSR & 0x10000000 ) == 0x10000000)?true:false)
-#define IS_VCLR() (((CPSR & 0x10000000 ) != 0x10000000)?true:false)
-#define VSET() ( CPSR = CPSR | 0x10000000 )
-#define VCLR() ( CPSR = CPSR & 0xEFFFFFFF )
-
-//test for immidiate bit
-#define IS_IMMI() ((inst & 0x01000000) == 0x01000000? true:false)
-
-//test for s bit
-#define IS_SBIT() ((inst & 0x00080000) == 0x01000000? true:false)
-
-// condition bits in the arm instruction
-#define COND_EQ 0b0000
-#define COND_NE 0b1000
-#define COND_CS 0b0100
-#define COND_HS 0b0100
-#define COND_CC 0b1100
-#define COND_LO 0b1100
-#define COND_MI 0b0010
-#define COND_PL 0b1010
-#define COND_VS 0b0110
-#define COND_VC 0b1110
-#define COND_HI 0b0001
-#define COND_LS 0b1001
-#define COND_GE 0b0101
-#define COND_LT 0b1101
-#define COND_GT 0b0011
-#define COND_LE 0b1011
-#define COND_AL 0b0111
-
-//Data processing instructions
-/*
- 0000 = AND - Rd:= Op1 AND Op2
- 0001 = EOR - Rd:= Op1 EOR Op2
- 0010 = SUB - Rd:= Op1 - Op2
- 0011 = RSB - Rd:= Op2 - Op1
- 0100 = ADD - Rd:= Op1 + Op2
- 0101 = ADC - Rd:= Op1 + Op2 + C
- 0110 = SBC - Rd:= Op1 - Op2 + C - 1
- 0111 = RSC - Rd:= Op2 - Op1 + C - 1
- 1000 = TST - set condition codes on Op1 AND Op2
- 1001 = TEQ - set condition codes on Op1 EOR Op2
- 1010 = CMP - set condition codes on Op1 - Op2
- 1011 = CMN - set condition codes on Op1 + Op2 1100 = ORR - Rd:= Op1 OR Op2
- 1101 = MOV - Rd:= Op2
- 1110 = BIC - Rd:= Op1 AND NOT Op2 1111 = MVN - Rd:= NOT Op2
-*/
-#define IN_BX  0b000100101111111111110001
-#define IN_B   0b1010
-#define IN_BL  0b1011
-#define IN_SDS_B 0b00010000
-#define IN_SDS_W 0b00010100
-#define IN_MRS_C 0b000100001111
-#define IN_MRS_S 0b000101001111
-#define IN_MSR_IC 0b0011001010001111
-#define IN_MSR_RC 0b0001001010001111
-#define IN_MSR_IS 0b0011011010001111
-#define IN_MSR_RS 0b0001011010001111
-
-#define IN_AND 0b0000
-#define IN_EOR 0b0001
-#define IN_SUB 0b0010
-#define IN_RSB 0b0011
-#define IN_ADD 0b0100
-#define IN_ADC 0b0101
-#define IN_SBC 0b0110
-#define IN_RSC 0b0111
-#define IN_TST 0b1000
-#define IN_TEQ 0b1001
-#define IN_CMP 0b1010
-#define IN_CMN 0b1011
-#define IN_ORR 0b1100
-#define IN_MOV 0b1101
-#define IN_BIC 0b1110
-#define IN_MVN 0b1111
-
-typedef enum _DataMode{
-    BYT = 0,
-    HWORD,
-    WORD
-}DataMode;
-
+#if 0
 // sram module
 SC_MODULE(ARM_SRAM) {
     sc_in<bool>             sclk;
@@ -364,153 +215,13 @@ SC_MODULE(ARM_FLASH) {
         sensitive << sclk.neg();
     }
 };
-
-// sram object
-ARM_SRAM sram("SRAM");
-
-// flash object
-ARM_FLASH flash("FLASH");
-
-enum SHFT_TYP {
-    LL = 0,
-    LR,
-    AR,
-    RR
-};
-
-typedef struct _BT_opts{
-    bool load ;
-    bool pre ;
-    bool wrtbck ;
-    bool isprevilageuser ;
-    bool is_add ;
-    
-    unsigned int addr;
-
-    _BT_opts():load(false), pre(false), wrtbck(false), isprevilageuser(false),
-    is_add(false),addr(0){}
-}BT_opts;
-
-typedef enum {
-    SVC_MODE = 0,
-    IRQ,
-    FIQ,
-    ABRT,
-    Undefined,
-    System
-}Interrupt_Mode;
-
-// processor module
-SC_MODULE(ARM_CORE) {
-    sc_in<bool>          sclk;
-    //sc_in<sc_uint<28> > instn;
-    //sc_in<sc_uint<4> >  cond;
-
-    sc_in<bool >         busintrf;
-    sc_in<bool >         busintrs;
-    //sc_in<bool >         busintrp;
-    //sc_in<sc_uint<32> >  datain;
-    //sc_out<sc_uint<32> > dataout;
-
-    sc_signal<bool>      flash_rsignal;
-    sc_signal<bool>      sram_rsignal;
-
-    sc_signal<bool>      flash_wsignal;
-    sc_signal<bool>      sram_wsignal;
-
-    //instruction cycle counter
-    int cycles;
-    
-    //processor busy flag
-    bool processor_busy;
-    
-    //s bit
-    bool s_bit;
-    
-    //immi bit
-    bool immi_bit;
-
-    //thumb mode
-    bool b_thumb;
-
-    //halfword transfer bit
-    bool halfword_transfer;
-    
-    //shift register
-    unsigned int shift;
-    
-    //shift type
-    SHFT_TYP shft_typ;
-    
-    //shift amount
-    unsigned int shft_amt;
-    
-    //dest register
-    unsigned int rd;
-    
-    //n register
-    unsigned int rn;
-    
-    //m register
-    unsigned int rm;
-
-    //destination mask
-    unsigned int Dst_Mask;
-
-    //instruction
-    unsigned int inst;
-    
-    //Rotate register
-    unsigned int rot;
-    
-    //immidiate register
-    unsigned int immi;
-
-    //General purpose registers
-    unsigned int R[16];
-
-    //Processor Interrupted
-    bool        Intruppted;
-
-    //Interrupted mode
-    Interrupt_Mode Intr_Mode;
-
-
-    //Link register when in SVC, IRQ and FIQ
-    unsigned int LReg[3];
-
-    //Current Program Status Register
-    unsigned int CPSR;
-
-    //Saved Program Status Register
-    unsigned int SPSR;
-
-    unsigned int SPSR_svc;
-
-    unsigned int SPSR_irq;
-
-    unsigned int SPSR_fiq;
-
-    //Interrupt mask register
-    unsigned int IMR;
-
-    //Control Register
-    unsigned int CR;
-
-    //bulktransfer initiated
-    bool bulktransfer;
-
-    //bulk transfer opts
-    BT_opts Bt_opts;
-
-    sc_fifo<unsigned int> BT_RegList;
-
-    bool Itblock(){
+#endif
+    bool ARM_CORE::Itblock(){
         //implement IT block here
         return true;
     }
     
-    unsigned int logic_shift_left(unsigned int reg, unsigned int s){
+    unsigned int ARM_CORE::logic_shift_left(unsigned int reg, unsigned int s){
         
         unsigned int carry_mask = 0x80000000;
         carry_mask = carry_mask >> (s-1);
@@ -533,7 +244,7 @@ SC_MODULE(ARM_CORE) {
         
     }
     
-    unsigned int logic_shift_right(unsigned int reg, unsigned int s){
+    unsigned int ARM_CORE::logic_shift_right(unsigned int reg, unsigned int s){
         
         unsigned int carry_mask = 0x00000001;
         carry_mask = carry_mask << (s-1);
@@ -556,7 +267,7 @@ SC_MODULE(ARM_CORE) {
         
     }
     
-    unsigned int arith_shift_right(unsigned int reg, unsigned int s){
+    unsigned int ARM_CORE::arith_shift_right(unsigned int reg, unsigned int s){
 
         unsigned int carry_mask = 0x00000001;
         carry_mask = carry_mask << (s-1);
@@ -592,7 +303,7 @@ SC_MODULE(ARM_CORE) {
         return ret;
     }
     
-    unsigned int rotate_right(unsigned int reg, unsigned int s){
+    unsigned int ARM_CORE::rotate_right(unsigned int reg, unsigned int s){
         
         unsigned int registr = 0;
         unsigned int ret = 0;
@@ -625,539 +336,13 @@ SC_MODULE(ARM_CORE) {
         return ret;
     }
 
-    void execute_thumb_inst(){
-        
-        if(TH_FMT_02(inst)){
-            //add or subtract immidiate
-            unsigned int rd = inst & 0b111 ;
-            unsigned int rs = inst & 0b111000 ;
-
-            rs = rs >> 3 ;
-
-            unsigned int rn = inst & 0b111000000 ;
-
-            rn = rn >> 6 ;
-
-            unsigned int result = 0;
-
-            if(inst & 0x0200){
-                //subtract
-                result = R[rn] - rs ;
-            } else {
-                //add
-                result = R[rn] + rs ;
-            }
-            
-            if(!Itblock()){
-                //update flags
-                VCLR();
-                CCLR();
-                    
-                if(R[rd]== 0)
-                    ZSET();
-                else
-                    ZCLR();
-                    
-                if(R[rd] & 0x80000000)
-                    NSET();
-                else
-                    NCLR();
-            }
-
-        } else if (TH_FMT_20(inst)) {
-            //add or subtract register
-
-            unsigned int rd = inst & 0b111 ;
-            unsigned int rs = inst & 0b111000 ;
-
-            rs = rs >> 3 ;
-
-            unsigned int rn = inst & 0b111000000 ;
-
-            rn = rn >> 6 ;
-
-            if(inst & 0x0200){
-                //subtract
-                R[rd] = R[rn] - R[rs] ;
-            } else {
-                //add
-                R[rd] = R[rn] + R[rs] ;
-            }
-
-            if(!Itblock()){
-                //update flags
-                VCLR();
-                CCLR();
-                    
-                if(R[rd]== 0)
-                    ZSET();
-                else
-                    ZCLR();
-                    
-                if(R[rd] & 0x80000000)
-                    NSET();
-                else
-                    NCLR();
-            }
-
-        } else if (TH_FMT_01(inst)){
-
-            unsigned int off5 = inst & 0b11111000000 ;
-            off5 = off5 >> 6 ;
-
-            unsigned int rd = inst & 0b111 ;
-
-            unsigned int rs = inst & 0b111000 ;
-
-            rs = rs >> 3 ;
-
-            unsigned int op = inst & 0x1800 ;
-
-            if( op == 0 && off5 == 0 && !Itblock()){
-                //move register
-                R[rd] = R[rs] ;
-
-            } else if(op == 0 ) {
-                //logic shift left
-                R[rd] = logic_shift_left(rs, off5) ;
-
-            } else if(op == 1 && Itblock()) {
-                //logic shift right               
-                R[rd] = logic_shift_right(rs, off5) ;
-
-            } else if(op == 2 && Itblock()) {
-                //arith shift right
-                R[rd] = arith_shift_right(rs, off5) ;
-
-            }
-
-            if(!Itblock()){
-                //update flags
-                VCLR();
-                    
-                if(R[rd]== 0)
-                    ZSET();
-                else
-                    ZCLR();
-                    
-                if(R[rd] & 0x80000000)
-                    NSET();
-                else
-                    NCLR();
-            }
-
-        } else if (TH_FMT_03(inst)){
-            
-            unsigned int off8 = inst & 0x0f ;
-            unsigned int rdn = inst & 0x70 ;
-
-            rdn = rdn >> 8 ;
-
-            unsigned int op = 0x1800 ;
-
-            switch(op) {
-                case 0b00: //move
-                R[rdn] = off8 ;
-
-                if(!Itblock()){
-                    VCLR();
-                    CCLR();
-                        
-                    if(R[rd]== 0)
-                        ZSET();
-                    else
-                        ZCLR();
-                        
-                    if(R[rd] & 0x80000000)
-                        NSET();
-                    else
-                        NCLR();
-                }
-                break;
-                case 0b01: //compare
-                VCLR();
-                CCLR();
-                if(R[rdn] == off8)
-                    ZSET();
-                else
-                    ZCLR();
-
-                if(R[rdn] < off8)
-                    NSET();
-                else
-                    NCLR();
-                break;
-                case 0b10: //add
-                R[rdn] = R[rdn] + off8;
-                if(!Itblock()){
-                    VCLR();
-                    CCLR();
-                    ZCLR();
-                    if(R[rdn] & 0x80000000)
-                        NSET();
-                    else
-                        NCLR();
-                }
-                break;
-                case 0b11: //sub
-                R[rdn] = R[rdn] - off8;
-                if(!Itblock()){
-                    VCLR();
-                    CCLR();
-                    if(R[rdn]== 0)
-                        ZSET();
-                    else
-                        ZCLR();
-                        
-                    if(R[rdn] & 0x80000000)
-                        NSET();
-                    else
-                        NCLR();
-                }
-                break;
-            }
-
-        } else if (TH_FMT_04(inst)){
-
-            unsigned int m_rd = inst & 0b111;
-            unsigned int m_rs = inst & 0b111000;
-
-            m_rs = m_rs >> 3;
-
-            unsigned int m_op = inst & 0b1111000000 ;
-
-            m_op = m_op >> 6;
-
-            switch(m_op) {
-                case 0b0000: //and
-                    R[m_rd] = R[m_rd] & R[m_rs];
-                    if(!Itblock()){
-                        VCLR();
-                        CCLR();
-                        if(R[m_rd]== 0)
-                            ZSET();
-                        else
-                            ZCLR();
-                            
-                        if(R[m_rd] & 0x80000000)
-                            NSET();
-                        else
-                            NCLR();
-                    }
-                break;
-                case 0b0001: //eor
-                    R[m_rd] = R[m_rd] ^ R[m_rs];
-                    if(!Itblock()){
-                        VCLR();
-                        CCLR();
-                        if(R[m_rd]== 0)
-                            ZSET();
-                        else
-                            ZCLR();
-                            
-                        if(R[m_rd] & 0x80000000)
-                            NSET();
-                        else
-                            NCLR();
-                    }
-                break;
-                case 0b0010: //lsl
-                    R[m_rd] = logic_shift_left(m_rd, R[m_rs]);
-                break;
-                case 0b0011: //lsr
-                    R[m_rd] = logic_shift_right(m_rd, R[m_rs]);
-                break;
-                case 0b0100: //asr
-                    R[m_rd] = arith_shift_right(m_rd, R[m_rs]);
-                break;
-                case 0b0101: //adc
-                    R[m_rd] = R[m_rd] + R[m_rs];
-
-                    if(IS_CSET())
-                        R[m_rd] = R[m_rd] + 1;
-
-                    if(!Itblock()){
-                        VCLR();
-                        CCLR();
-                        if(R[m_rd]== 0)
-                            ZSET();
-                        else
-                            ZCLR();
-                            
-                        if(R[m_rd] & 0x80000000)
-                            NSET();
-                        else
-                            NCLR();
-                    }
-                break;
-                case 0b0110: //sbc
-                    R[m_rd] = R[m_rd] - R[m_rs];
-                    
-                    if(IS_CSET())
-                        R[m_rd] = R[m_rd] - 1;
-
-                    if(!Itblock()){
-                        VCLR();
-                        CCLR();
-                        if(R[m_rd]== 0)
-                            ZSET();
-                        else
-                            ZCLR();
-                            
-                        if(R[m_rd] & 0x80000000)
-                            NSET();
-                        else
-                            NCLR();
-                    }
-                break;
-                case 0b0111: //ror
-                    R[m_rd] = rotate_right(m_rd, R[m_rs]);
-                break;
-                case 0b1000: //tst
-                {
-                    unsigned int m_res = R[m_rd] & R[m_rs];
-                    VCLR();
-                    CCLR();
-                    if(m_res== 0)
-                        ZSET();
-                    else
-                        ZCLR();
-                            
-                    if(m_res & 0x80000000)
-                        NSET();
-                    else
-                        NCLR();
-                }  
-                break;
-                case 0b1001: //rsb
-                    R[m_rd] = R[m_rs] - R[m_rd];
-                    if(!Itblock()){
-                        VCLR();
-                        CCLR();
-                        if(R[m_rd]== 0)
-                            ZSET();
-                        else
-                            ZCLR();
-                            
-                        if(R[m_rd] & 0x80000000)
-                            NSET();
-                        else
-                            NCLR();
-                    }
-                break;
-                case 0b1010: //cmp
-                    VCLR();
-                    CCLR();
-                    if(R[m_rd] == R[m_rs])
-                        ZSET();
-                    else
-                        ZCLR();
-
-                    if(R[m_rd] <  R[m_rs])
-                        NSET();
-                    else
-                        NCLR();
-                break;
-                case 0b1011: //cmn
-                    VCLR();
-                    CCLR();
-                    if(R[m_rd] == R[m_rs])
-                        ZSET();
-                    else
-                        ZCLR();
-
-                    if(R[m_rd] >  R[m_rs])
-                        NSET();
-                    else
-                        NCLR();
-                break;
-                case 0b1100: //orr
-                    R[m_rd] = R[m_rd] | R[m_rs];
-                
-                    if(!Itblock()) {
-                        VCLR();
-                        CCLR();
-                        if(R[rd]== 0)
-                            ZSET();
-                        else
-                            ZCLR();
-                        
-                        if(R[rd] & 0x80000000)
-                            NSET();
-                        else
-                            NCLR();
-                    }
-                break;
-                case 0b1101: //mul
-                {
-                    unsigned long m_res = R[m_rd] * R[m_rs];
-                    m_res = m_res & 0x00000000ffffffff;
-
-                    R[m_rd] = m_res;
-
-                    if(!Itblock()) {
-                        VCLR();
-                        CCLR();
-                        if(R[rd]== 0)
-                            ZSET();
-                        else
-                            ZCLR();
-                        
-                        if(R[rd] & 0x80000000)
-                            NSET();
-                        else
-                            NCLR();
-                    }
-                }
-                break;
-                case 0b1110: //bic
-                    R[m_rd] = R[m_rd] & !R[m_rs] ;
-                    if(!Itblock()) {
-                        VCLR();
-                        CCLR();
-                        if(R[rd]== 0)
-                            ZSET();
-                        else
-                            ZCLR();
-                        
-                        if(R[rd] & 0x80000000)
-                            NSET();
-                        else
-                            NCLR();
-                    }
-                break;
-                case 0b1111: //mvn
-                    R[m_rd] = ~R[m_rs] ;
-                    if(!Itblock()) {
-                        VCLR();
-                        CCLR();
-                        if(R[rd]== 0)
-                            ZSET();
-                        else
-                            ZCLR();
-                        
-                        if(R[rd] & 0x80000000)
-                            NSET();
-                        else
-                            NCLR();
-                    }
-                break;
-            }
-
-        } else if (TH_FMT_05(inst)){
-
-            unsigned int m_rd = inst & 0b111 ;
-            unsigned int m_rs = inst & 0b1111000 ;
-
-            m_rs = m_rs >> 3 ;
-
-            if(inst & 0x80)
-                m_rd = m_rd | 0x08 ;
-
-            unsigned int m_op = inst & 0x30 ;
-
-            switch(m_op){
-                case 0b00: //add
-                    R[m_rd] = R[m_rd] + R[m_rs] ;
-                    if(!Itblock()) {
-                        VCLR();
-                        CCLR();
-                        if(R[rd]== 0)
-                            ZSET();
-                        else
-                            ZCLR();
-                        
-                        if(R[rd] & 0x80000000)
-                            NSET();
-                        else
-                            NCLR();
-                    }
-                break;
-                case 0b01: //cmp
-                    VCLR();
-                    CCLR();
-                    if(R[m_rd] == R[m_rs])
-                        ZSET();
-                    else
-                        ZCLR();
-
-                    if(R[m_rd] <  R[m_rs])
-                        NSET();
-                    else
-                        NCLR();
-                break;
-                case 0b10: //mov
-                    R[m_rd] = R[m_rs] ;
-                    VCLR();
-                    CCLR();
-                    if(R[rd]== 0)
-                        ZSET();
-                    else
-                        ZCLR();
-                        
-                    if(R[rd] & 0x80000000)
-                        NSET();
-                    else
-                        NCLR();
-                break;
-                case 0b11: // B & BL
-                    if(Itblock()){
-                        if(m_rs & 0x8)
-                            R[14] = R[15];
-                            
-                        R[15] = R[m_rs];
-                    }
-                break;
-            }
-
-        } else if (TH_FMT_06(inst)){
-
-        } else if (TH_FMT_07(inst)){
-
-        } else if (TH_FMT_08(inst)){
-
-        } else if (TH_FMT_09(inst)){
-
-        } else if (TH_FMT_10(inst)){
-
-        } else if (TH_FMT_11(inst)){
-
-        } else if (TH_FMT_11(inst)){
-
-        } else if (TH_FMT_12(inst)){
-
-        } else if (TH_FMT_13(inst)){
-
-        } else if (TH_FMT_14(inst)){
-
-        } else if (TH_FMT_15(inst)){
-
-        } else if (TH_FMT_16(inst)){
-
-        } else if (TH_FMT_17(inst)){
-
-        } else if (TH_FMT_18(inst)){
-
-        } else if (TH_FMT_19(inst)){
-
-        } else {
-            processor_busy = false;
-            //clear flags set by previous inst
-            VCLR();
-            CCLR();
-            ZCLR();
-            NCLR();
-        }
-
-    }
-
-    void execute_inst () {
+    void ARM_CORE::execute_inst () {
         //clear flags set by previous inst
         //VCLR();
         //CCLR();
         //ZCLR();
         //NCLR();
-
+#if 0
         //check for bulktransfer is true
         if(bulktransfer && cycles >= 1) {
             unsigned int val;
@@ -1216,7 +401,7 @@ SC_MODULE(ARM_CORE) {
             } else {
                 cycles = 0;
                 bulktransfer = false;
-                processor_busy = false;
+                //processor_busy = false;
 
                 //call constructor to set all values to zero
                 BT_opts Bt_opts();
@@ -1246,7 +431,7 @@ SC_MODULE(ARM_CORE) {
             }
 
             halfword_transfer = false;
-            processor_busy = false;
+            //processor_busy = false;
 
             cycles = 0;
 
@@ -1265,7 +450,7 @@ SC_MODULE(ARM_CORE) {
 
         if (check_inst == 0b01 && cycles == 1) {
 
-            processor_busy = false;
+            //processor_busy = false;
             cycles = 0;
 
             //clear flags set by previous inst
@@ -1276,11 +461,11 @@ SC_MODULE(ARM_CORE) {
 
             return;
         }
-
+#endif
         //check if bx instruction
         bool mult_flag = false;
         unsigned int mult_op = 0;
-        check_inst = inst & BX_MASK ;
+        unsigned int check_inst = inst & BX_MASK ;
         check_inst = check_inst >> 4;
 
         if(check_inst == IN_BX)
@@ -1296,7 +481,7 @@ SC_MODULE(ARM_CORE) {
             //Move the value of register to PC
             R[15] = R[rm];
 
-            processor_busy = false;
+            //processor_busy = false;
             //Clear all the flags
             VCLR();
             CCLR();
@@ -1328,7 +513,7 @@ SC_MODULE(ARM_CORE) {
 
             R[15] = R[15] + (int)offset ;
 
-            processor_busy = false;
+            //processor_busy = false;
             //Clear all the flags
             VCLR();
             CCLR();
@@ -1384,7 +569,7 @@ SC_MODULE(ARM_CORE) {
 
             R[15] = 0x08 ;
 
-            processor_busy = false ;
+            //processor_busy = false ;
             VCLR();
             CCLR();
             ZCLR();
@@ -1400,7 +585,12 @@ SC_MODULE(ARM_CORE) {
 
         if (check_inst == 0b100) {            
 
-            bulktransfer = true;
+            //bulktransfer = true;
+            bool load = false;
+            bool pre = false;
+            bool is_add = false;
+            bool wrtbck = false;
+            bool isprevilageuser = false;
 
             unsigned int opts = inst & 0x01f00000 ;
 
@@ -1408,23 +598,23 @@ SC_MODULE(ARM_CORE) {
 
             //check if load or store op
             if(opts & 0x01)
-                Bt_opts.load = true;
+                load = true;
             
             //check if pre or post
             if(opts & 0x100)
-                Bt_opts.pre = true;
+                pre = true;
 
             //check if up / down
             if(opts & 0x80)
-                Bt_opts.is_add = true;
+                is_add = true;
 
             //check if write back is true
             if(opts & 0x02)
-                Bt_opts.wrtbck = true;
+                wrtbck = true;
 
             //check if PSR or force user
             if(opts & 0x04)
-                Bt_opts.isprevilageuser = true;
+                isprevilageuser = true;
 
             
             rn = inst & 0x000f0000 ;
@@ -1433,77 +623,39 @@ SC_MODULE(ARM_CORE) {
 
             unsigned int regs = inst & 0x0000ffff ;
             unsigned int i = 0;
-            while(regs != 0){
-                
-                if(regs & 0x01)
-                    BT_RegList.write(i);
+            unsigned int addr = 0;
 
+            while(regs != 0){
+
+                if(pre) {
+                    if(is_add)
+                        addr = R[rn] + 4;
+                    else
+                        addr = R[rn] - 4;
+                }
+                
+                if(regs & 0x01){
+                    //BT_RegList.write(i);
+                    if(load) {
+                        bus.read(addr, (unsigned char *)&R[i], 4);
+                    } else {
+                        bus.write(addr, (unsigned char *)&R[i], 4);
+                    }
+                }
                 i++;
+                
+                if(!pre) {
+                    if(is_add)
+                        addr = R[rn] + 4;
+                    else
+                        addr = R[rn] - 4;
+                } else if (wrtbck) {
+                    R[rn] = addr;
+                } else {
+
+                }
 
                 regs = regs >> 1;
-            }
-            
-            if(BT_RegList.num_available() == 0) {
-                //clear flags set by previous inst
-                VCLR();
-                CCLR();
-                ZCLR();
-                NCLR();
-
-                processor_busy = false ;
-                bulktransfer = false;
-
-                return;
-            }
-
-            if(Bt_opts.pre) {
-                if(Bt_opts.is_add)
-                    Bt_opts.addr = R[rn] + 4;
-                else
-                    Bt_opts.addr = R[rn] - 4;
-            }
-                
-            if( Bt_opts.addr < SRAM_START_ADDR){
-                flash.addr = Bt_opts.addr;
-                if(Bt_opts.load) {
-                    Dst_Mask = BT_RegList.read() ;
-                    
-                    flash.mode = WORD;
-
-                    flash_rsignal = true;
-                } else {
-                    flash.data = R[BT_RegList.read()] ;
-
-                    flash.mode = WORD;
-
-                    flash_wsignal = true;
-                }
-            } else {
-                sram.addr = Bt_opts.addr;
-                if(Bt_opts.load) {
-                    Dst_Mask = BT_RegList.read() ;
-                    
-                    sram.mode = WORD;
-
-                    sram_rsignal = true;
-                } else {
-                    sram.data = R[BT_RegList.read()] ;
-
-                    sram.mode = WORD;
-
-                    sram_wsignal = true;
-                }
-            }
-
-            if(!Bt_opts.pre) {
-                if(Bt_opts.is_add)
-                    Bt_opts.addr = R[rn] + 4;
-                else
-                    Bt_opts.addr = R[rn] - 4;
-            } else if (Bt_opts.wrtbck) {
-                R[rn] = Bt_opts.addr;
-            } else {
-
             }
 
             //clear flags set by previous inst
@@ -1533,7 +685,7 @@ SC_MODULE(ARM_CORE) {
                 R[rd] == SPSR ;
             }
 
-            processor_busy = false;
+            //processor_busy = false;
             //Clear all the flags
             VCLR();
             CCLR();
@@ -1584,7 +736,7 @@ SC_MODULE(ARM_CORE) {
                     SPSR = val ;
             }
 
-            processor_busy = false;
+            //processor_busy = false;
             //Clear all the flags
             VCLR();
             CCLR();
@@ -1742,50 +894,24 @@ SC_MODULE(ARM_CORE) {
                 else
                     addr = R[rn] - operand2;
             }
-                
-            if( addr < SRAM_START_ADDR){
-                flash.addr = addr;
-                if(load) {
-                    Dst_Mask = rd ;
-                    
-                    if(isbyte)
-                        flash.mode = BYT;
-                    else
-                        flash.mode = WORD;
-
-                    flash_rsignal = true;
+            
+            if(!load) {
+                if(isbyte){
+                    unsigned char val = 0;
+                    bus.read(addr, &val,1);
+                    R[rd] = val;
                 } else {
-                    flash.data = R[rd] ;
-
-                    if(isbyte)
-                        flash.mode = BYT;
-                    else
-                        flash.mode = WORD;
-
-                    flash_wsignal = true;
-                    processor_busy = false;
+                    unsigned int val = 0;
+                    bus.read(addr, (unsigned char *)&val,4);
+                    R[rd] = val;                    
                 }
-            } else {
-                sram.addr = addr;
-                if(load) {
-                    Dst_Mask = rd ;
-                    
-                    if(isbyte)
-                        sram.mode = BYT;
-                    else
-                        sram.mode = WORD;
-
-                    sram_rsignal = true;
+            }else {
+                if(isbyte){
+                    unsigned char val = R[rd] & 0xffff;
+                    bus.write(addr, &val,1);
                 } else {
-                    sram.data = R[rd] ;
-
-                    if(isbyte)
-                        sram.mode = BYT;
-                    else
-                        sram.mode = WORD;
-
-                    sram_wsignal = true;
-                    processor_busy = false;
+                    unsigned int val = R[rd];
+                    bus.write(addr, (unsigned char *)&val,4);
                 }
             }
 
@@ -1808,6 +934,7 @@ SC_MODULE(ARM_CORE) {
 
             return;
         }
+
         // check if halfword instrn
         if(halfword_transfer) {
             bool load = false;
@@ -1856,56 +983,26 @@ SC_MODULE(ARM_CORE) {
                 else
                     addr = R[rn] - offs;
             }
-                
-            if( addr < SRAM_START_ADDR){
-                flash.addr = addr;
-                if(load) {
-                    Dst_Mask = rd ;
-                    
-                    if(SH == 1 || SH == 3){
-                        flash.mode = HWORD ;
-                    } else {
-                        flash.mode = BYT ;
-                    }
+            unsigned char val[2] = {0,0};
 
-                    flash_rsignal = true;
-                } else {
-                    flash.data = R[rd] ;
-
-                    if(SH == 1 || SH == 3){
-                        flash.mode = HWORD ;
-                    } else {
-                        flash.mode = BYT ;
-                    }
-
-                    flash_wsignal = true;
-                    processor_busy = false;
-                    halfword_transfer = false;
+            if(!load) {
+                if(SH == 1){
+                    bus.read(addr, &val[0],1);
+                    R[rd] = val[0];
+                } else if(SH == 3){
+                    bus.read(addr, &val[0],2);
+                    R[rd] = val[1];
+                    R[rd] = R[rd] << 8;
+                    R[rd] = R[rd] | val[0];
                 }
-            } else {
-                sram.addr = addr;
-                if(load) {
-                    Dst_Mask = rd ;
-                    
-                    if(SH == 1 || SH == 3){
-                        sram.mode = HWORD ;
-                    } else {
-                        sram.mode = BYT ;
-                    }
-
-                    sram_rsignal = true;
-                } else {
-                    sram.data = R[rd] ;
-
-                    if(SH == 1 || SH == 3){
-                        sram.mode = HWORD ;
-                    } else {
-                        sram.mode = BYT ;
-                    }
-
-                    sram_wsignal = true;
-                    processor_busy = false;
-                    halfword_transfer = false;
+            }else {
+                if(SH == 1){
+                    val[0] = R[rd] & 0xffff;
+                    bus.write(addr, &val[0],1);
+                } else if(SH == 3){
+                    val[0] = R[rd] & 0xffff;
+                    val[1] = (R[rd] & 0xffff0000) >> 8 ;
+                    bus.write(addr, &val[0],2);
                 }
             }
 
@@ -1959,7 +1056,7 @@ SC_MODULE(ARM_CORE) {
                         NCLR();
                 }
                 
-                processor_busy = false;
+                //processor_busy = false;
                 break;
             }
             case IN_EOR:
@@ -1987,7 +1084,7 @@ SC_MODULE(ARM_CORE) {
                     else
                         NCLR();
                 }
-                processor_busy = false;
+                //processor_busy = false;
                 break;
             }
             case IN_SUB:
@@ -2019,7 +1116,7 @@ SC_MODULE(ARM_CORE) {
                     else
                         NCLR();
                 }
-                processor_busy = false;
+                //processor_busy = false;
                 break;
             }
             case IN_RSB:
@@ -2039,7 +1136,7 @@ SC_MODULE(ARM_CORE) {
                     else
                         NCLR();
                 }
-                processor_busy = false;
+                //processor_busy = false;
                 break;
             }
             case IN_ADD:
@@ -2069,7 +1166,7 @@ SC_MODULE(ARM_CORE) {
                     else
                         NCLR();
                 }
-                processor_busy = false;
+                //processor_busy = false;
                 break;
             }
             case IN_ADC:
@@ -2093,7 +1190,7 @@ SC_MODULE(ARM_CORE) {
                     else
                         NCLR();
                 }
-                processor_busy = false;
+                //processor_busy = false;
                 break;
             }
             case IN_SBC:
@@ -2123,7 +1220,7 @@ SC_MODULE(ARM_CORE) {
                     else
                         NCLR();
                 }
-                processor_busy = false;
+                //processor_busy = false;
                 break;
             }
             case IN_RSC:
@@ -2159,7 +1256,7 @@ SC_MODULE(ARM_CORE) {
                     else
                         NCLR();
                 }
-                processor_busy = false;
+                //processor_busy = false;
                 break;
             }
             case IN_TST:
@@ -2180,7 +1277,7 @@ SC_MODULE(ARM_CORE) {
                         NCLR();
                 }
                 
-                processor_busy = false;
+                //processor_busy = false;
                 break;
             }
             case IN_TEQ:
@@ -2200,7 +1297,7 @@ SC_MODULE(ARM_CORE) {
                     else
                         NCLR();
                 }
-                processor_busy = false;
+                //processor_busy = false;
                 break;
             }
             case IN_CMP:
@@ -2220,7 +1317,7 @@ SC_MODULE(ARM_CORE) {
                     else
                         NCLR();
                 }
-                processor_busy = false;
+                //processor_busy = false;
                 break;
             }
             case IN_CMN:
@@ -2240,7 +1337,7 @@ SC_MODULE(ARM_CORE) {
                     else
                         NCLR();
                 }
-                processor_busy = false;
+                //processor_busy = false;
                 break;
             }
             case IN_ORR:
@@ -2260,7 +1357,7 @@ SC_MODULE(ARM_CORE) {
                     else
                         NCLR();
                 }
-                processor_busy = false;
+                //processor_busy = false;
                 break;
             }
             case IN_MOV:
@@ -2285,7 +1382,7 @@ SC_MODULE(ARM_CORE) {
                     else
                         NCLR();
                 }
-                processor_busy = false;
+                //processor_busy = false;
                 break;
             }
             case IN_MVN:
@@ -2304,7 +1401,7 @@ SC_MODULE(ARM_CORE) {
                     else
                         NCLR();
                 }
-                processor_busy = false;
+                //processor_busy = false;
                 break;
             }
             case IN_BIC:
@@ -2324,16 +1421,16 @@ SC_MODULE(ARM_CORE) {
                     else
                         NCLR();
                 }
-                processor_busy = false;
+                //processor_busy = false;
                 break;
             }   
             default:
-                processor_busy = false;
+                //processor_busy = false;
                 break;
         };
     }
 
-    void process_condition() {
+    void ARM_CORE::process_condition() {
         if(b_thumb == false)
         {
             // get the cond bits from 28 to 31
@@ -2404,11 +1501,12 @@ SC_MODULE(ARM_CORE) {
                     execute_inst();
                     break;
             };
-        }
-        if ( cycles != 0 && b_thumb == false)
-            execute_inst();
+        } else
+            execute_thumb_inst();
+        //if ( cycles != 0 && b_thumb == false)
+        //    execute_inst();
     }
-
+#if 0
     void process2(unsigned int val) {
         if(DST_MASK_INST & Dst_Mask){
             inst = val;
@@ -2465,10 +1563,10 @@ SC_MODULE(ARM_CORE) {
         }
         process2(val) ;        
     }
+#endif
+    void ARM_CORE::process() {
 
-    void process() {
-
-        if(sclk.read() && !processor_busy)
+        /*if(sclk.read() && !//processor_busy)
         {
             if(R[15] < SRAM_START_ADDR){
                 flash.addr = R[15];
@@ -2481,50 +1579,61 @@ SC_MODULE(ARM_CORE) {
                 sram_rsignal = true;
                 Dst_Mask = DST_MASK_INST;
             }
-            processor_busy = true;
+            //processor_busy = true;
         } else {
             flash_rsignal = false;
             flash_wsignal = false;
             sram_rsignal = false;
             sram_wsignal = false;
+        }*/
+        if(!b_thumb){
+            bus.read(R[15],(unsigned char *)inst,4);
+            // increment program counter
+            R[15] = R[15] + 4;
+        }else{
+            bus.read(R[15],(unsigned char *)inst,2);
+            // increment program counter
+            R[15] = R[15] + 2;
         }
+
+        process_condition();
     }
 
-    SC_CTOR(ARM_CORE):  immi(0), processor_busy(false), rot(0), b_thumb(false), cycles(0),
+    ARM_CORE::ARM_CORE(const char *name) : sc_module(name), immi(0), rot(0), b_thumb(false),
      s_bit(false), immi_bit(false), shift(0), rm(0), rn(0), rd(0), CPSR(0),SPSR(0),
-     bulktransfer(false), Intruppted(false), Intr_Mode(SVC_MODE),
-     flash_rsignal("FL_RS"),
+     Intruppted(false), Intr_Mode(SVC_MODE), bus("armcore_master"), halfword_transfer(false)
+     /*,flash_rsignal("FL_RS"),
      sram_rsignal("SR_RS"),
      flash_wsignal("FL_WS"),
-     sram_wsignal("SR_WS") 
+     sram_wsignal("SR_WS") */
      {
+        SC_HAS_PROCESS(ARM_CORE);
 
-        sc_fifo<unsigned int> BT_RegList(16);
+        //sc_fifo<unsigned int> BT_RegList(16);
         memset (R, 0, sizeof(unsigned int) * 15);
         R[15] = 0x04;
 
-        flash.intr(flash_rsignal);
+        /*flash.intr(flash_rsignal);
         sram.intr(sram_rsignal);
 
         flash.intrw(flash_wsignal);
-        sram.intrw(sram_wsignal);
+        sram.intrw(sram_wsignal);*/
 
         //Set processor state to take instruction
-        Dst_Mask = DST_MASK_INST;
+        //Dst_Mask = DST_MASK_INST;
 
         SC_METHOD(process);
          dont_initialize();
-        sensitive << sclk;
+        sensitive << sclk.pos();
 
-        SC_METHOD(process2f);
+        /*SC_METHOD(process2f);
          dont_initialize();
         sensitive << busintrf.pos();
 
         SC_METHOD(process2s);
          dont_initialize();
-        sensitive << busintrs.pos();
+        sensitive << busintrs.pos();*/
     }
-};
 
 
 int sc_main (int argc, char* argv[]) {
@@ -2540,12 +1649,12 @@ int sc_main (int argc, char* argv[]) {
     }*/
 
     ARM_CORE processor("PROCESSOR");
-    processor.sclk(clock);
+    /*processor.sclk(clock);
     processor.busintrf(flash.intrp);
     processor.busintrs(sram.intrp);
 
     flash.sclk(clock);
-    sram.sclk(clock);
+    sram.sclk(clock);*/
 
     sc_start();
 

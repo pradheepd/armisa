@@ -6,5 +6,5 @@ CXX_FLAGS =  -g
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/usr/local/systemc/include -I/home/pradeep/Desktop/ARMISA/armisa/{CMAKE_CURRENT_LIST_DIR} 
+CXX_INCLUDES = -I/usr/local/systemc/include -I/home/pradeep/Desktop/ARMISA/armisa/include 
 
