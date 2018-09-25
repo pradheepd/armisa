@@ -1,0 +1,693 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		01B45E917C984419A27D1B06 /* ZERO_CHECK */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = FDDB77B163B0424ABFDB24FE /* Build configuration list for PBXAggregateTarget "ZERO_CHECK" */;
+			buildPhases = (
+				345138CF06A94AC9ACFEA76E /* CMake Rules */,
+			);
+			dependencies = (
+			);
+			name = ZERO_CHECK;
+			productName = ZERO_CHECK;
+		};
+		D48B1076E7FC41EFA785EBB8 /* ALL_BUILD */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 556B2FE3991E48A0A1E4D3B3 /* Build configuration list for PBXAggregateTarget "ALL_BUILD" */;
+			buildPhases = (
+				06B690D0B91B42FFAA10A45C /* CMake Rules */,
+			);
+			dependencies = (
+				8DC04D89477C4CDCA248E3F5 /* PBXTargetDependency */,
+				19B3C8DDB5D64219A96B9BA1 /* PBXTargetDependency */,
+			);
+			name = ALL_BUILD;
+			productName = ALL_BUILD;
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXBuildFile section */
+		099F94744B4B49F7A991DF8C /* /Users/pradeep/Documents/IOT_proj/ARMISA/SRAM/SRAMMem.cpp */ = {isa = PBXBuildFile; fileRef = E50EEFE025764914A5FD35F1 /* /Users/pradeep/Documents/IOT_proj/ARMISA/SRAM/SRAMMem.cpp */; };
+		0BEEFA05A05D4E129D874B0C /* /Users/pradeep/Documents/IOT_proj/ARMISA/BUS/src/BusMaster.cpp */ = {isa = PBXBuildFile; fileRef = 5785A48CA925433982644F6D /* /Users/pradeep/Documents/IOT_proj/ARMISA/BUS/src/BusMaster.cpp */; };
+		5644BAB935A740F6A91415C9 /* /Users/pradeep/Documents/IOT_proj/ARMISA/XCode/CMakeLists.txt */ = {isa = PBXBuildFile; fileRef = 2E6AB2BBB277473FA2C5C7A3 /* /Users/pradeep/Documents/IOT_proj/ARMISA/XCode/CMakeLists.txt */; };
+		9DD940937A894712BE2DA200 /* /Users/pradeep/Documents/IOT_proj/ARMISA/BUS/src/SimpleInitTarg.cpp */ = {isa = PBXBuildFile; fileRef = 0342F95BA1784FA3A1241402 /* /Users/pradeep/Documents/IOT_proj/ARMISA/BUS/src/SimpleInitTarg.cpp */; };
+		AA0C3FD1D23E44CEA9A578E6 /* /Users/pradeep/Documents/IOT_proj/ARMISA/BUS/src/BusTop.cpp */ = {isa = PBXBuildFile; fileRef = B89B70BF55FF43BEA4004090 /* /Users/pradeep/Documents/IOT_proj/ARMISA/BUS/src/BusTop.cpp */; };
+		ADCFC2A8B2A3436A859EE615 /* /Users/pradeep/Documents/IOT_proj/ARMISA/Processor/ARMISA.cpp */ = {isa = PBXBuildFile; fileRef = 6BA518F6A52B41F0A392D2DC /* /Users/pradeep/Documents/IOT_proj/ARMISA/Processor/ARMISA.cpp */; };
+		D4277B2E3E2C4415B715CABD /* /Users/pradeep/Documents/IOT_proj/ARMISA/Processor/Thumbisa.cpp */ = {isa = PBXBuildFile; fileRef = E54EF19EEB694421B9086801 /* /Users/pradeep/Documents/IOT_proj/ARMISA/Processor/Thumbisa.cpp */; };
+		D74251E15D3B4619B481F77B /* /Users/pradeep/Documents/IOT_proj/ARMISA/Flash/FlashMem.cpp */ = {isa = PBXBuildFile; fileRef = 5AEB5CE195A54AD582EC81F3 /* /Users/pradeep/Documents/IOT_proj/ARMISA/Flash/FlashMem.cpp */; };
+		EFC992EB37D14C2F940F7168 /* /Users/pradeep/Documents/IOT_proj/ARMISA/BUS/src/BusSlave.cpp */ = {isa = PBXBuildFile; fileRef = 8D9AD3B99066488987061B5B /* /Users/pradeep/Documents/IOT_proj/ARMISA/BUS/src/BusSlave.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXBuildStyle section */
+		40C2F4D0E8C64C1C8931FA12 /* Debug */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			name = Debug;
+		};
+		5591CFB0D2654D109BEC31E6 /* RelWithDebInfo */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			name = RelWithDebInfo;
+		};
+		6820483B50434A95BC4DEFC6 /* Release */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			name = Release;
+		};
+		E7D872998A504567A38956DF /* MinSizeRel */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+			};
+			name = MinSizeRel;
+		};
+/* End PBXBuildStyle section */
+
+/* Begin PBXContainerItemProxy section */
+		0E8610CC5FFC4167AD087F20 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 91F4915420CA4C20BBE5B77B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 01B45E917C984419A27D1B06;
+			remoteInfo = ZERO_CHECK;
+		};
+		7FA5D71EBFC043E392618293 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 91F4915420CA4C20BBE5B77B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 01B45E917C984419A27D1B06;
+			remoteInfo = ZERO_CHECK;
+		};
+		F43FF12CF8FC4D60A02CDCDF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 91F4915420CA4C20BBE5B77B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5B645951DAF045DEA6E0D495;
+			remoteInfo = armisa;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0342F95BA1784FA3A1241402 /* /Users/pradeep/Documents/IOT_proj/ARMISA/BUS/src/SimpleInitTarg.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = SimpleInitTarg.cpp; path = ../BUS/src/SimpleInitTarg.cpp; sourceTree = SOURCE_ROOT; };
+		2E6AB2BBB277473FA2C5C7A3 /* /Users/pradeep/Documents/IOT_proj/ARMISA/XCode/CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; name = CMakeLists.txt; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		4F16F551EB354571B176AD52 /* /Users/pradeep/Documents/IOT_proj/ARMISA/XCode/CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; name = CMakeLists.txt; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		5785A48CA925433982644F6D /* /Users/pradeep/Documents/IOT_proj/ARMISA/BUS/src/BusMaster.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = BusMaster.cpp; path = ../BUS/src/BusMaster.cpp; sourceTree = SOURCE_ROOT; };
+		5AEB5CE195A54AD582EC81F3 /* /Users/pradeep/Documents/IOT_proj/ARMISA/Flash/FlashMem.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = FlashMem.cpp; path = ../Flash/FlashMem.cpp; sourceTree = SOURCE_ROOT; };
+		6BA518F6A52B41F0A392D2DC /* /Users/pradeep/Documents/IOT_proj/ARMISA/Processor/ARMISA.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = ARMISA.cpp; path = ../Processor/ARMISA.cpp; sourceTree = SOURCE_ROOT; };
+		8D9AD3B99066488987061B5B /* /Users/pradeep/Documents/IOT_proj/ARMISA/BUS/src/BusSlave.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = BusSlave.cpp; path = ../BUS/src/BusSlave.cpp; sourceTree = SOURCE_ROOT; };
+		A8F40498458D4F948AB2BC40 /* armisa */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; path = armisa; sourceTree = BUILT_PRODUCTS_DIR; };
+		B89B70BF55FF43BEA4004090 /* /Users/pradeep/Documents/IOT_proj/ARMISA/BUS/src/BusTop.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = BusTop.cpp; path = ../BUS/src/BusTop.cpp; sourceTree = SOURCE_ROOT; };
+		D86F3DF9B393447FBFCDD7BA /* /Users/pradeep/Documents/IOT_proj/ARMISA/XCode/CMakeLists.txt */ = {isa = PBXFileReference; explicitFileType = sourcecode.text; fileEncoding = 4; name = CMakeLists.txt; path = CMakeLists.txt; sourceTree = SOURCE_ROOT; };
+		E50EEFE025764914A5FD35F1 /* /Users/pradeep/Documents/IOT_proj/ARMISA/SRAM/SRAMMem.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = SRAMMem.cpp; path = ../SRAM/SRAMMem.cpp; sourceTree = SOURCE_ROOT; };
+		E54EF19EEB694421B9086801 /* /Users/pradeep/Documents/IOT_proj/ARMISA/Processor/Thumbisa.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 4; name = Thumbisa.cpp; path = ../Processor/Thumbisa.cpp; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		1D2077985FBC4117B72A3914 /* ZERO_CHECK */ = {
+			isa = PBXGroup;
+			children = (
+				AFE8115CD99A4D70AEC7F802 /* CMake Rules */,
+				D86F3DF9B393447FBFCDD7BA /* /Users/pradeep/Documents/IOT_proj/ARMISA/XCode/CMakeLists.txt */,
+			);
+			name = ZERO_CHECK;
+			sourceTree = "<group>";
+		};
+		5F698431BB48407CB82F24FC /* ALL_BUILD */ = {
+			isa = PBXGroup;
+			children = (
+				81DD90AFC71F49158D63F9E6 /* CMake Rules */,
+				4F16F551EB354571B176AD52 /* /Users/pradeep/Documents/IOT_proj/ARMISA/XCode/CMakeLists.txt */,
+			);
+			name = ALL_BUILD;
+			sourceTree = "<group>";
+		};
+		81DD90AFC71F49158D63F9E6 /* CMake Rules */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "CMake Rules";
+			sourceTree = "<group>";
+		};
+		A81261549A944056A45CF68A /* Source Files */ = {
+			isa = PBXGroup;
+			children = (
+				5785A48CA925433982644F6D /* /Users/pradeep/Documents/IOT_proj/ARMISA/BUS/src/BusMaster.cpp */,
+				8D9AD3B99066488987061B5B /* /Users/pradeep/Documents/IOT_proj/ARMISA/BUS/src/BusSlave.cpp */,
+				B89B70BF55FF43BEA4004090 /* /Users/pradeep/Documents/IOT_proj/ARMISA/BUS/src/BusTop.cpp */,
+				0342F95BA1784FA3A1241402 /* /Users/pradeep/Documents/IOT_proj/ARMISA/BUS/src/SimpleInitTarg.cpp */,
+				5AEB5CE195A54AD582EC81F3 /* /Users/pradeep/Documents/IOT_proj/ARMISA/Flash/FlashMem.cpp */,
+				6BA518F6A52B41F0A392D2DC /* /Users/pradeep/Documents/IOT_proj/ARMISA/Processor/ARMISA.cpp */,
+				E54EF19EEB694421B9086801 /* /Users/pradeep/Documents/IOT_proj/ARMISA/Processor/Thumbisa.cpp */,
+				E50EEFE025764914A5FD35F1 /* /Users/pradeep/Documents/IOT_proj/ARMISA/SRAM/SRAMMem.cpp */,
+			);
+			name = "Source Files";
+			sourceTree = "<group>";
+		};
+		AFE8115CD99A4D70AEC7F802 /* CMake Rules */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = "CMake Rules";
+			sourceTree = "<group>";
+		};
+		B09BFDB4742140C38047DDC3 = {
+			isa = PBXGroup;
+			children = (
+				F6EF5BFAA4C7462EBE2ED22D /* armisa */,
+				5F698431BB48407CB82F24FC /* ALL_BUILD */,
+				1D2077985FBC4117B72A3914 /* ZERO_CHECK */,
+				FFEBFE799C324BF4AEDA6A4A /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		F6EF5BFAA4C7462EBE2ED22D /* armisa */ = {
+			isa = PBXGroup;
+			children = (
+				A81261549A944056A45CF68A /* Source Files */,
+				2E6AB2BBB277473FA2C5C7A3 /* /Users/pradeep/Documents/IOT_proj/ARMISA/XCode/CMakeLists.txt */,
+			);
+			name = armisa;
+			sourceTree = "<group>";
+		};
+		FFEBFE799C324BF4AEDA6A4A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A8F40498458D4F948AB2BC40 /* armisa */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		5B645951DAF045DEA6E0D495 /* armisa */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A13C0A2906AF4CE8A7B78037 /* Build configuration list for PBXNativeTarget "armisa" */;
+			buildPhases = (
+				D71CA90E58364F978AF86B8E /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				8D59466257584FFBB3734CC0 /* PBXTargetDependency */,
+			);
+			name = armisa;
+			productName = armisa;
+			productReference = A8F40498458D4F948AB2BC40 /* armisa */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		91F4915420CA4C20BBE5B77B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 0940;
+			};
+			buildConfigurationList = 52FA09C281B4438C9662960B /* Build configuration list for PBXProject "armisa" */;
+			buildSettings = {
+			};
+			buildStyles = (
+				40C2F4D0E8C64C1C8931FA12 /* Debug */,
+				6820483B50434A95BC4DEFC6 /* Release */,
+				E7D872998A504567A38956DF /* MinSizeRel */,
+				5591CFB0D2654D109BEC31E6 /* RelWithDebInfo */,
+			);
+			compatibilityVersion = "Xcode 3.2";
+			hasScannedForEncodings = 0;
+			mainGroup = B09BFDB4742140C38047DDC3;
+			projectDirPath = .;
+			projectRoot = "";
+			targets = (
+				D48B1076E7FC41EFA785EBB8 /* ALL_BUILD */,
+				01B45E917C984419A27D1B06 /* ZERO_CHECK */,
+				5B645951DAF045DEA6E0D495 /* armisa */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		06B690D0B91B42FFAA10A45C /* CMake Rules */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			name = "CMake Rules";
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "make -C /Users/pradeep/Documents/IOT_proj/ARMISA/XCode -f /Users/pradeep/Documents/IOT_proj/ARMISA/XCode/CMakeScripts/ALL_BUILD_cmakeRulesBuildPhase.make$CONFIGURATION all";
+			showEnvVarsInLog = 0;
+		};
+		345138CF06A94AC9ACFEA76E /* CMake Rules */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			name = "CMake Rules";
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "make -C /Users/pradeep/Documents/IOT_proj/ARMISA/XCode -f /Users/pradeep/Documents/IOT_proj/ARMISA/XCode/CMakeScripts/ZERO_CHECK_cmakeRulesBuildPhase.make$CONFIGURATION all";
+			showEnvVarsInLog = 0;
+		};
+		64319A286B3345F2B930855C = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# shell script goes here
+exit 0";
+			showEnvVarsInLog = 0;
+		};
+		D935050F67F34096934EEB3C = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# shell script goes here
+exit 0";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D71CA90E58364F978AF86B8E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0BEEFA05A05D4E129D874B0C /* /Users/pradeep/Documents/IOT_proj/ARMISA/BUS/src/BusMaster.cpp */,
+				EFC992EB37D14C2F940F7168 /* /Users/pradeep/Documents/IOT_proj/ARMISA/BUS/src/BusSlave.cpp */,
+				AA0C3FD1D23E44CEA9A578E6 /* /Users/pradeep/Documents/IOT_proj/ARMISA/BUS/src/BusTop.cpp */,
+				9DD940937A894712BE2DA200 /* /Users/pradeep/Documents/IOT_proj/ARMISA/BUS/src/SimpleInitTarg.cpp */,
+				D74251E15D3B4619B481F77B /* /Users/pradeep/Documents/IOT_proj/ARMISA/Flash/FlashMem.cpp */,
+				ADCFC2A8B2A3436A859EE615 /* /Users/pradeep/Documents/IOT_proj/ARMISA/Processor/ARMISA.cpp */,
+				D4277B2E3E2C4415B715CABD /* /Users/pradeep/Documents/IOT_proj/ARMISA/Processor/Thumbisa.cpp */,
+				099F94744B4B49F7A991DF8C /* /Users/pradeep/Documents/IOT_proj/ARMISA/SRAM/SRAMMem.cpp */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		19B3C8DDB5D64219A96B9BA1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5B645951DAF045DEA6E0D495 /* armisa */;
+			targetProxy = F43FF12CF8FC4D60A02CDCDF /* PBXContainerItemProxy */;
+		};
+		8D59466257584FFBB3734CC0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 01B45E917C984419A27D1B06 /* ZERO_CHECK */;
+			targetProxy = 0E8610CC5FFC4167AD087F20 /* PBXContainerItemProxy */;
+		};
+		8DC04D89477C4CDCA248E3F5 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 01B45E917C984419A27D1B06 /* ZERO_CHECK */;
+			targetProxy = 7FA5D71EBFC043E392618293 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		1A2E39AFEF674F05AF289CA5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk;
+				SYMROOT = /Users/pradeep/Documents/IOT_proj/ARMISA/XCode/build;
+			};
+			name = Debug;
+		};
+		2474E7F475EA45A9BED32526 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = ("/Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../../systemc-2.3.2/src",/Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../include,/Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../BUS/inc);
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/pradeep/Documents/IOT_proj/ARMISA/XCode;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("-Wmost","-Wno-four-char-constants","-Wno-unknown-pragmas","$(inherited)");
+			};
+			name = Debug;
+		};
+		43E3E99E45E64457AA7E2803 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = ("/Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../../systemc-2.3.2/src",/Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../include,/Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../BUS/inc);
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/pradeep/Documents/IOT_proj/ARMISA/XCode;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("-Wmost","-Wno-four-char-constants","-Wno-unknown-pragmas","$(inherited)");
+			};
+			name = Release;
+		};
+		6137506C515D43698DFF4523 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk;
+				SYMROOT = /Users/pradeep/Documents/IOT_proj/ARMISA/XCode/build;
+			};
+			name = RelWithDebInfo;
+		};
+		6238DBD57D634710BF3394B5 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = ("/Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../../systemc-2.3.2/src",/Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../include,/Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../BUS/inc);
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/pradeep/Documents/IOT_proj/ARMISA/XCode;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("-Wmost","-Wno-four-char-constants","-Wno-unknown-pragmas","$(inherited)");
+			};
+			name = Release;
+		};
+		635213E840F64B299F8CA154 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = s;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = ("/Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../../systemc-2.3.2/src",/Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../include,/Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../BUS/inc);
+				INSTALL_PATH = "";
+				LD_RUNPATH_SEARCH_PATHS = "/Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../../systemc-2.3.2/lib-macosx64 /Users/pradeep/Documents/IOT_proj/ARMISA/XCode/BUS/build";
+				LIBRARY_SEARCH_PATHS = " /Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../../systemc-2.3.2/lib-macosx64/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME) /Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../../systemc-2.3.2/lib-macosx64 /Users/pradeep/Documents/IOT_proj/ARMISA/XCode/BUS/build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME) /Users/pradeep/Documents/IOT_proj/ARMISA/XCode/BUS/build";
+				OTHER_CPLUSPLUSFLAGS = "    -DNDEBUG  ";
+				OTHER_LDFLAGS = " -Wl,-search_paths_first -Wl,-headerpad_max_install_names  -lsystemc-2.3.2";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = armisa;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/pradeep/Documents/IOT_proj/ARMISA/XCode;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("-Wmost","-Wno-four-char-constants","-Wno-unknown-pragmas","$(inherited)");
+			};
+			name = MinSizeRel;
+		};
+		6EE0CD6314D34E0BB2FB9AA6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = ("/Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../../systemc-2.3.2/src",/Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../include,/Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../BUS/inc);
+				INSTALL_PATH = "";
+				LD_RUNPATH_SEARCH_PATHS = "/Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../../systemc-2.3.2/lib-macosx64 /Users/pradeep/Documents/IOT_proj/ARMISA/XCode/BUS/build";
+				LIBRARY_SEARCH_PATHS = " /Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../../systemc-2.3.2/lib-macosx64/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME) /Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../../systemc-2.3.2/lib-macosx64 /Users/pradeep/Documents/IOT_proj/ARMISA/XCode/BUS/build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME) /Users/pradeep/Documents/IOT_proj/ARMISA/XCode/BUS/build";
+				OTHER_CPLUSPLUSFLAGS = "    -DNDEBUG  ";
+				OTHER_LDFLAGS = " -Wl,-search_paths_first -Wl,-headerpad_max_install_names  -lsystemc-2.3.2";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = armisa;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/pradeep/Documents/IOT_proj/ARMISA/XCode;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("-Wmost","-Wno-four-char-constants","-Wno-unknown-pragmas","$(inherited)");
+			};
+			name = Release;
+		};
+		A5AEB2FDC0184E448C94F5A9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = ("/Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../../systemc-2.3.2/src",/Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../include,/Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../BUS/inc);
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/pradeep/Documents/IOT_proj/ARMISA/XCode;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("-Wmost","-Wno-four-char-constants","-Wno-unknown-pragmas","$(inherited)");
+			};
+			name = Debug;
+		};
+		ADC9CADE8C81459C96B7493D /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk;
+				SYMROOT = /Users/pradeep/Documents/IOT_proj/ARMISA/XCode/build;
+			};
+			name = MinSizeRel;
+		};
+		B4E66E26286F49D9838040C4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = ("/Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../../systemc-2.3.2/src",/Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../include,/Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../BUS/inc);
+				INSTALL_PATH = "";
+				LD_RUNPATH_SEARCH_PATHS = "/Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../../systemc-2.3.2/lib-macosx64 /Users/pradeep/Documents/IOT_proj/ARMISA/XCode/BUS/build";
+				LIBRARY_SEARCH_PATHS = " /Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../../systemc-2.3.2/lib-macosx64/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME) /Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../../systemc-2.3.2/lib-macosx64 /Users/pradeep/Documents/IOT_proj/ARMISA/XCode/BUS/build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME) /Users/pradeep/Documents/IOT_proj/ARMISA/XCode/BUS/build";
+				OTHER_CPLUSPLUSFLAGS = "    ";
+				OTHER_LDFLAGS = " -Wl,-search_paths_first -Wl,-headerpad_max_install_names  -lsystemc-2.3.2";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = armisa;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/pradeep/Documents/IOT_proj/ARMISA/XCode;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("-Wmost","-Wno-four-char-constants","-Wno-unknown-pragmas","$(inherited)");
+			};
+			name = Debug;
+		};
+		B75894A4FD20414C9B8C782B /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = ("/Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../../systemc-2.3.2/src",/Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../include,/Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../BUS/inc);
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/pradeep/Documents/IOT_proj/ARMISA/XCode;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("-Wmost","-Wno-four-char-constants","-Wno-unknown-pragmas","$(inherited)");
+			};
+			name = MinSizeRel;
+		};
+		C9EB20B1F003466CBDB23733 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = ("/Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../../systemc-2.3.2/src",/Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../include,/Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../BUS/inc);
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/pradeep/Documents/IOT_proj/ARMISA/XCode;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("-Wmost","-Wno-four-char-constants","-Wno-unknown-pragmas","$(inherited)");
+			};
+			name = RelWithDebInfo;
+		};
+		D9B99BC197424EFD8D6CBC98 /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				EXECUTABLE_PREFIX = "";
+				EXECUTABLE_SUFFIX = "";
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 2;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = ("/Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../../systemc-2.3.2/src",/Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../include,/Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../BUS/inc);
+				INSTALL_PATH = "";
+				LD_RUNPATH_SEARCH_PATHS = "/Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../../systemc-2.3.2/lib-macosx64 /Users/pradeep/Documents/IOT_proj/ARMISA/XCode/BUS/build";
+				LIBRARY_SEARCH_PATHS = " /Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../../systemc-2.3.2/lib-macosx64/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME) /Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../../systemc-2.3.2/lib-macosx64 /Users/pradeep/Documents/IOT_proj/ARMISA/XCode/BUS/build/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME) /Users/pradeep/Documents/IOT_proj/ARMISA/XCode/BUS/build";
+				OTHER_CPLUSPLUSFLAGS = "       -DNDEBUG  ";
+				OTHER_LDFLAGS = " -Wl,-search_paths_first -Wl,-headerpad_max_install_names  -lsystemc-2.3.2";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = armisa;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/pradeep/Documents/IOT_proj/ARMISA/XCode;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("-Wmost","-Wno-four-char-constants","-Wno-unknown-pragmas","$(inherited)");
+			};
+			name = RelWithDebInfo;
+		};
+		E0BC0BAE7D8B47049180F485 /* MinSizeRel */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = ("/Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../../systemc-2.3.2/src",/Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../include,/Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../BUS/inc);
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ALL_BUILD;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/pradeep/Documents/IOT_proj/ARMISA/XCode;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("-Wmost","-Wno-four-char-constants","-Wno-unknown-pragmas","$(inherited)");
+			};
+			name = MinSizeRel;
+		};
+		EA789BE5CD754BCF8A4786CF /* RelWithDebInfo */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_INLINES_ARE_PRIVATE_EXTERN = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = ("'CMAKE_INTDIR=\"$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)\"'");
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				HEADER_SEARCH_PATHS = ("/Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../../systemc-2.3.2/src",/Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../include,/Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../BUS/inc);
+				INSTALL_PATH = "";
+				OTHER_LDFLAGS = " ";
+				OTHER_REZFLAGS = "";
+				PRODUCT_NAME = ZERO_CHECK;
+				SECTORDER_FLAGS = "";
+				SYMROOT = /Users/pradeep/Documents/IOT_proj/ARMISA/XCode;
+				USE_HEADERMAP = NO;
+				WARNING_CFLAGS = ("-Wmost","-Wno-four-char-constants","-Wno-unknown-pragmas","$(inherited)");
+			};
+			name = RelWithDebInfo;
+		};
+		EEC23BE78F1F4124B24D92EB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.13.sdk;
+				SYMROOT = /Users/pradeep/Documents/IOT_proj/ARMISA/XCode/build;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		52FA09C281B4438C9662960B /* Build configuration list for PBXProject "armisa" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1A2E39AFEF674F05AF289CA5 /* Debug */,
+				EEC23BE78F1F4124B24D92EB /* Release */,
+				ADC9CADE8C81459C96B7493D /* MinSizeRel */,
+				6137506C515D43698DFF4523 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		556B2FE3991E48A0A1E4D3B3 /* Build configuration list for PBXAggregateTarget "ALL_BUILD" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2474E7F475EA45A9BED32526 /* Debug */,
+				43E3E99E45E64457AA7E2803 /* Release */,
+				E0BC0BAE7D8B47049180F485 /* MinSizeRel */,
+				C9EB20B1F003466CBDB23733 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		A13C0A2906AF4CE8A7B78037 /* Build configuration list for PBXNativeTarget "armisa" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B4E66E26286F49D9838040C4 /* Debug */,
+				6EE0CD6314D34E0BB2FB9AA6 /* Release */,
+				635213E840F64B299F8CA154 /* MinSizeRel */,
+				D9B99BC197424EFD8D6CBC98 /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		FDDB77B163B0424ABFDB24FE /* Build configuration list for PBXAggregateTarget "ZERO_CHECK" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A5AEB2FDC0184E448C94F5A9 /* Debug */,
+				6238DBD57D634710BF3394B5 /* Release */,
+				B75894A4FD20414C9B8C782B /* MinSizeRel */,
+				EA789BE5CD754BCF8A4786CF /* RelWithDebInfo */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 91F4915420CA4C20BBE5B77B /* Project object */;
+}

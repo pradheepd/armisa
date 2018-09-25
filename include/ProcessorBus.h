@@ -18,6 +18,8 @@ typedef void (backward_interface::*Callback_Write_bw)(bool);
 typedef bool (forward_interface::*Callback_Read_fw)(unsigned int addr, unsigned char *data, unsigned int datalen);
 typedef bool (forward_interface::*Callback_Write_fw)(unsigned int addr, unsigned char *data, unsigned int datalen);
 */
+#ifndef __PROCESSORBUS_H
+#define __PROCESSORBUS_H
 
 typedef void (*Callback_Read_bw)(bool, unsigned char*);
 typedef void (*Callback_Write_bw)(bool);
@@ -89,3 +91,5 @@ class ProcessorBus_Slave_nb : public ProcessorBus_Slave_base
     virtual void register_read_cb(Callback_Read_fw);
     virtual void register_write_cb(Callback_Write_fw);
 };
+
+#endif

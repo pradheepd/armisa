@@ -1,6 +1,7 @@
 #include "systemc.h"
 #include "fstream"
 #include "ARM_CORE.h"
+#include "PeripheralDefs.h"
 
 #if 0
 // sram module
@@ -216,6 +217,7 @@ SC_MODULE(ARM_FLASH) {
     }
 };
 #endif
+
     bool ARM_CORE::Itblock(){
         //implement IT block here
         return true;
@@ -1647,7 +1649,8 @@ int sc_main (int argc, char* argv[]) {
         if(!flash.Load_Program(argv[1]))
             exit(1);
     }*/
-
+    FLASH flash("flash_mem");
+    SRAM sram("sram_mem");
     ARM_CORE processor("PROCESSOR");
     /*processor.sclk(clock);
     processor.busintrf(flash.intrp);

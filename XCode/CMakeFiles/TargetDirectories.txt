@@ -1,0 +1,3 @@
+/Users/pradeep/Documents/IOT_proj/ARMISA/XCode/CMakeFiles/armisa.dir
+/Users/pradeep/Documents/IOT_proj/ARMISA/XCode/CMakeFiles/ALL_BUILD.dir
+/Users/pradeep/Documents/IOT_proj/ARMISA/XCode/CMakeFiles/ZERO_CHECK.dir
