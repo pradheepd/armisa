@@ -2,6 +2,7 @@
 #include "fstream"
 #include "ARM_CORE.h"
 #include "PeripheralDefs.h"
+#include "libelf.h"
 
 #if 0
 // sram module
@@ -1613,7 +1614,10 @@ SC_MODULE(ARM_FLASH) {
 
         //sc_fifo<unsigned int> BT_RegList(16);
         memset (R, 0, sizeof(unsigned int) * 15);
-        R[15] = 0x04;
+        
+        bus.read(VT_IN_SP_VAL_ADDR,(unsigned char *)&R[13],4);
+        
+        bus.read(VT_RESET,(unsigned char *)&R[15],4);
 
         /*flash.intr(flash_rsignal);
         sram.intr(sram_rsignal);
@@ -1625,8 +1629,8 @@ SC_MODULE(ARM_FLASH) {
         //Dst_Mask = DST_MASK_INST;
 
         SC_METHOD(process);
-         dont_initialize();
-        sensitive << sclk.pos();
+        dont_initialize();
+            sensitive << sclk.pos();
 
         /*SC_METHOD(process2f);
          dont_initialize();
@@ -1649,6 +1653,7 @@ int sc_main (int argc, char* argv[]) {
         if(!flash.Load_Program(argv[1]))
             exit(1);
     }*/
+    INTRNAL internal("Internal_mem");
     FLASH flash("flash_mem");
     SRAM sram("sram_mem");
     ARM_CORE processor("PROCESSOR");
