@@ -27,6 +27,18 @@ systemc.h
 /home/pradeep/Desktop/ARMISA/armisa/Flash/systemc.h
 PeripheralDefs.h
 /home/pradeep/Desktop/ARMISA/armisa/Flash/PeripheralDefs.h
+libelf.h
+/home/pradeep/Desktop/ARMISA/armisa/Flash/libelf.h
+stdio.h
+/home/pradeep/Desktop/ARMISA/armisa/Flash/stdio.h
+gelf.h
+-
+
+/home/pradeep/Desktop/ARMISA/armisa/Flash/IntnalMem.cpp
+systemc.h
+/home/pradeep/Desktop/ARMISA/armisa/Flash/systemc.h
+PeripheralDefs.h
+/home/pradeep/Desktop/ARMISA/armisa/Flash/PeripheralDefs.h
 
 /home/pradeep/Desktop/ARMISA/armisa/Processor/ARMISA.cpp
 systemc.h
@@ -35,6 +47,10 @@ fstream
 /home/pradeep/Desktop/ARMISA/armisa/Processor/fstream
 ARM_CORE.h
 /home/pradeep/Desktop/ARMISA/armisa/Processor/ARM_CORE.h
+PeripheralDefs.h
+/home/pradeep/Desktop/ARMISA/armisa/Processor/PeripheralDefs.h
+libelf.h
+/home/pradeep/Desktop/ARMISA/armisa/Processor/libelf.h
 
 /home/pradeep/Desktop/ARMISA/armisa/Processor/Thumbisa.cpp
 ARM_CORE.h

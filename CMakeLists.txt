@@ -14,4 +14,4 @@ link_directories("${CMAKE_CURRENT_LIST_DIR}/BUS/build")
 
 add_executable(armisa  Processor/ARMISA.cpp Processor/Thumbisa.cpp Flash/FlashMem.cpp Flash/IntnalMem.cpp SRAM/SRAMMem.cpp)
 
-target_link_libraries( armisa systemc ProcessorBus)
+target_link_libraries( armisa systemc elf ProcessorBus)

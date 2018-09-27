@@ -486,27 +486,368 @@
                 break;
             }
 
-        } else if (TH_FMT_06(inst)){
+        } else if (TH_FMT_06(inst)){ // PC relative load
+
+            unsigned int m_off8 = inst & 0xff ;
+
+            unsigned int m_rt = inst & 0x700 ;
+
+            m_rt = m_rt >> 8 ;
+
+            bus.read(R[15]+m_off8, (unsigned char *)&R[m_rt],4);
+
+            //clear flags set by previous inst
+            VCLR();
+            CCLR();
+            ZCLR();
+            NCLR();
 
         } else if (TH_FMT_07(inst)){
 
+            unsigned int m_rd = inst & 0x7 ;
+
+            unsigned int m_rn = inst & 0x38 ;
+            
+            m_rn = m_rn >> 3 ;
+
+            unsigned int m_rm = inst & 0x1c ;
+
+            m_rm = m_rm >> 6 ;
+
+            unsigned int m_op =  inst & 0x0c00 ;
+
+            m_op = m_op >> 10 ;
+
+            unsigned int m_addr = 0;
+
+            switch(m_op) {
+                case 0b00: // store word to memory
+                m_addr = R[m_rm] + R[m_rn] ;
+                bus.write(m_addr, (unsigned char*)&R[m_rd],4);
+                break;
+                case 0b01: // store byte to memory
+                m_addr = R[m_rm] + R[m_rn] ;
+                bus.write(m_addr, (unsigned char*)&R[m_rd],1);
+                break;
+                case 0b10: // load word from memory
+                m_addr = R[m_rm] + R[m_rn] ;
+                bus.read(m_addr, (unsigned char*)&R[m_rd],4);
+                break;
+                case 0b11: // load unsigned byte
+                m_addr = R[m_rm] + R[m_rn] ;
+                bus.read(m_addr, (unsigned char*)&R[m_rd],1);                
+                R[m_rd] = R[m_rd] & 0x000000ff ;
+                break;
+            }
+
+            //clear flags set by previous inst
+            VCLR();
+            CCLR();
+            ZCLR();
+            NCLR();
+
         } else if (TH_FMT_08(inst)){
+
+            unsigned int m_rd = inst & 0x7 ;
+
+            unsigned int m_rn = inst & 0x38 ;
+            
+            m_rn = m_rn >> 3 ;
+
+            unsigned int m_rm = inst & 0x1c ;
+
+            m_rm = m_rm >> 6 ;
+
+            unsigned int m_op =  inst & 0x0c00 ;
+
+            m_op = m_op >> 10 ;
+
+            unsigned int m_addr = 0;
+
+            switch(m_op) {
+                case 0b00: // store halfword to memory
+                m_addr = R[m_rm] + R[m_rn] ;
+                bus.write(m_addr, (unsigned char*)&R[m_rd],2);
+                break;
+                case 0b01: // load signed byte
+                m_addr = R[m_rm] + R[m_rn] ;
+                bus.read(m_addr, (unsigned char*)&R[m_rd],1);
+                if(R[m_rd] & 0x80) // sign extend
+                    R[m_rd] = R[m_rd] | 0xffffff00 ;
+                else
+                    R[m_rd] = R[m_rd] & 0x000000ff ;
+                break;
+                case 0b10: // load halfword from memory unsigned
+                m_addr = R[m_rm] + R[m_rn] ;
+                bus.read(m_addr, (unsigned char*)&R[m_rd],2);
+                R[m_rd] = R[m_rd] & 0x0000ffff;
+                break;
+                case 0b11: // load signed halfword
+                m_addr = R[m_rm] + R[m_rn] ;
+                bus.read(m_addr, (unsigned char*)&R[m_rd],2);
+                if(R[m_rd] & 0x80) // sign extend
+                    R[m_rd] = R[m_rd] | 0xffff0000 ;
+                else
+                    R[m_rd] = R[m_rd] & 0x0000ffff ;
+                break;
+            }
+
+            //clear flags set by previous inst
+            VCLR();
+            CCLR();
+            ZCLR();
+            NCLR();
 
         } else if (TH_FMT_09(inst)){
 
+            unsigned int m_rt = inst & 0x7 ;
+
+            unsigned int m_rn = inst & 0x38 ;
+            
+            m_rn = m_rn >> 3 ;
+
+            unsigned int m_off5 = inst & 0x07c0 ;
+
+            m_off5 = m_off5 >> 6 ;
+
+            unsigned int m_op = inst & 0x1800 ;
+
+            m_op = m_op >> 11 ;
+
+            unsigned int m_addr = R[m_rn] + m_off5 ;
+
+            switch (m_op) {
+                
+                case 0b00: // store word immidiate
+                bus.write(m_addr, (unsigned char*)&R[m_rt], 4);
+                break;
+                case 0b01: // load word immidiate
+                bus.read(m_addr, (unsigned char*)&R[m_rt], 4);
+                break;
+                case 0b10: // store byte immidiate
+                bus.write(m_addr, (unsigned char*)&R[m_rt], 1);
+                break;
+                case 0b11: // load byte immidiate
+                bus.read(m_addr, (unsigned char*)&R[m_rt], 1);
+                R[m_rt] = R[m_rt] & 0x000000ff ;
+                break;
+            }
+
+            //clear flags set by previous inst
+            VCLR();
+            CCLR();
+            ZCLR();
+            NCLR();
+
         } else if (TH_FMT_10(inst)){
 
-        } else if (TH_FMT_11(inst)){
+            unsigned int m_rt = inst & 0x7 ;
+
+            unsigned int m_rn = inst & 0x38 ;
+            
+            m_rn = m_rn >> 3 ;
+
+            unsigned int m_off5 = inst & 0x07c0 ;
+
+            m_off5 = m_off5 >> 6 ;
+
+            unsigned int m_op = inst & 0x0800 ;
+
+            m_op = m_op >> 11 ;
+
+            unsigned int m_addr = R[m_rn] + m_off5 ;
+
+            switch (m_op) {
+                
+                case 0b0: // store halfword immidiate
+                bus.write(m_addr, (unsigned char*)&R[m_rt], 2);
+                break;
+                case 0b1: // load halfword immidiate
+                bus.read(m_addr, (unsigned char*)&R[m_rt], 2);
+                R[m_rt] = R[m_rt] & 0x0000ffff ;
+                break;
+            }
+
+            //clear flags set by previous inst
+            VCLR();
+            CCLR();
+            ZCLR();
+            NCLR();
 
         } else if (TH_FMT_11(inst)){
+
+            unsigned int m_off8 = inst & 0x0ff ;
+
+            unsigned int m_rt = inst & 0x700 ;
+
+            m_rt = m_rt >> 8 ;
+
+            unsigned int m_op = inst & 0x0800 ;
+
+            m_op = m_op >> 11 ;
+
+            unsigned int m_addr = R[13] + m_off8 ;
+
+            switch (m_op) {
+                
+                case 0b0: // store word SP relative
+                bus.write(m_addr, (unsigned char*)&R[m_rt], 4);
+                break;
+                case 0b1: // load word SP relative
+                bus.read(m_addr, (unsigned char*)&R[m_rt], 4);
+                break;
+            }
+
+            //clear flags set by previous inst
+            VCLR();
+            CCLR();
+            ZCLR();
+            NCLR();
 
         } else if (TH_FMT_12(inst)){
 
+            unsigned int m_off8 = inst & 0x0ff ;
+
+            unsigned int m_rt = inst & 0x700 ;
+
+            m_rt = m_rt >> 8 ;
+
+            unsigned int m_op = inst & 0x0800 ;
+
+            m_op = m_op >> 11 ;
+
+            switch (m_op) {
+                
+                case 0b0: // add to pc and store in dst register
+                R[m_rt] = R[15] + m_off8 ;
+                break;
+                case 0b1: // add to sp and store in dst register
+                R[m_rt] = R[13] + m_off8 ;
+                break;
+            }
+
+            //clear flags set by previous inst
+            VCLR();
+            CCLR();
+            ZCLR();
+            NCLR();
+
         } else if (TH_FMT_13(inst)){
+
+            unsigned int m_immi = inst & 0x7f ;
+
+            if ( inst & 0x80){ // decrement SP with immidiate
+
+                R[13] = R[13] - m_immi ;
+
+            }else { // increment SP with immidiate
+
+                R[13] = R[13] + m_immi ;
+
+            }
+
+            //clear flags set by previous inst
+            VCLR();
+            CCLR();
+            ZCLR();
+            NCLR();
 
         } else if (TH_FMT_14(inst)){
 
+            unsigned int m_op = 0x0f00 ;
+
+            m_op = m_op >> 8 ;
+
+            switch(m_op) {
+                case 0b0010:
+                {
+                    unsigned int m_rd = 0x7 ;
+
+                    unsigned int m_rm = 0x38 ;
+
+                    m_rm = m_rm >> 3 ;
+
+                    m_op = inst & 0xc0 ;
+
+                    m_op = m_op >> 6 ;
+
+                    if(m_op == 0){ //sign extend halfword
+                        R[m_rd] = R[m_rm] & 0x0000ffff ;
+
+                        if(R[m_rd] & 0x8000) {
+                            R[m_rd] = R[m_rd] | 0xffff0000 ;
+                        }
+                    } else if (m_op == 0b01){ // sign extend byte
+                        R[m_rd] = R[m_rm] & 0x000000ff ;
+
+                        if(R[m_rd] & 0x80) {
+                            R[m_rd] = R[m_rd] | 0xffffff00 ;
+                        }
+                    } else if (m_op == 0b10){ // unsign extend halfword
+
+                        R[m_rd] = R[m_rm] & 0x0000ffff ;
+
+                    } else { // unsign extend byte
+
+                        R[m_rd] = R[m_rm] & 0x000000ff ;
+
+                    }
+                }
+                break;
+                case 0b0001:
+                break;
+                case 0b0011:
+                break;
+            }
+
+            //clear flags set by previous inst
+            VCLR();
+            CCLR();
+            ZCLR();
+            NCLR();
+
         } else if (TH_FMT_15(inst)){
+
+            unsigned int m_reglist8 = inst & 0x0ff ;
+
+            unsigned int m_rn = inst & 0x700 ;
+
+            m_rn = m_rn >> 8 ;
+
+            unsigned int m_op = inst & 0x0800 ;
+
+            m_op = m_op >> 11 ;
+
+            unsigned int m_addr = R[m_rn] ;
+
+            switch (m_op) {
+                
+                case 0b0: // store multiple registers to address
+                    for(int i =0; i < 8; i++){
+                        if(m_reglist8 & 0x01){
+                            bus.write(m_addr, (unsigned char *)&R[i], 4);
+                            m_addr+=4;
+                        }
+                        m_reglist8 = m_reglist8 >> 1 ;
+                    }
+                break;
+                case 0b1: // load multiple registers from address
+                    for(int i =0; i < 8; i++){
+                        if(m_reglist8 & 0x01){
+                            bus.read(m_addr, (unsigned char *)&R[i], 4);
+                            m_addr+=4;
+                        }
+                        m_reglist8 = m_reglist8 >> 1 ;
+                    }
+                break;
+            }
+
+            R[m_rn] = m_addr ;
+            //clear flags set by previous inst
+            VCLR();
+            CCLR();
+            ZCLR();
+            NCLR();
 
         } else if (TH_FMT_16(inst)){
 

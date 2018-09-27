@@ -150,6 +150,33 @@ Flash/FlashMem.cpp.s:
 	$(MAKE) -f CMakeFiles/armisa.dir/build.make CMakeFiles/armisa.dir/Flash/FlashMem.cpp.s
 .PHONY : Flash/FlashMem.cpp.s
 
+Flash/IntnalMem.o: Flash/IntnalMem.cpp.o
+
+.PHONY : Flash/IntnalMem.o
+
+# target to build an object file
+Flash/IntnalMem.cpp.o:
+	$(MAKE) -f CMakeFiles/armisa.dir/build.make CMakeFiles/armisa.dir/Flash/IntnalMem.cpp.o
+.PHONY : Flash/IntnalMem.cpp.o
+
+Flash/IntnalMem.i: Flash/IntnalMem.cpp.i
+
+.PHONY : Flash/IntnalMem.i
+
+# target to preprocess a source file
+Flash/IntnalMem.cpp.i:
+	$(MAKE) -f CMakeFiles/armisa.dir/build.make CMakeFiles/armisa.dir/Flash/IntnalMem.cpp.i
+.PHONY : Flash/IntnalMem.cpp.i
+
+Flash/IntnalMem.s: Flash/IntnalMem.cpp.s
+
+.PHONY : Flash/IntnalMem.s
+
+# target to generate assembly for a file
+Flash/IntnalMem.cpp.s:
+	$(MAKE) -f CMakeFiles/armisa.dir/build.make CMakeFiles/armisa.dir/Flash/IntnalMem.cpp.s
+.PHONY : Flash/IntnalMem.cpp.s
+
 Processor/ARMISA.o: Processor/ARMISA.cpp.o
 
 .PHONY : Processor/ARMISA.o
@@ -243,6 +270,9 @@ help:
 	@echo "... Flash/FlashMem.o"
 	@echo "... Flash/FlashMem.i"
 	@echo "... Flash/FlashMem.s"
+	@echo "... Flash/IntnalMem.o"
+	@echo "... Flash/IntnalMem.i"
+	@echo "... Flash/IntnalMem.s"
 	@echo "... Processor/ARMISA.o"
 	@echo "... Processor/ARMISA.i"
 	@echo "... Processor/ARMISA.s"
