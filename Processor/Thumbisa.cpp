@@ -1,5 +1,6 @@
 #include "ARM_CORE.h"
 #include "ThumbDefs.h"
+#include "PeripheralDefs.h"
 
     void ARM_CORE::execute_thumb_inst(){
         
@@ -795,8 +796,117 @@
                 }
                 break;
                 case 0b0001:
+                case 0b0011: // branch if zero
+                {
+                    unsigned int m_rn = inst & 0x7;
+
+                    if(!Itblock() && m_rn == 0) {
+
+                        unsigned int m_immi6 = inst & 0xf8 ;
+
+                        if(inst & 0x200)
+                            m_immi6 = m_immi6 | 0x20 ;
+
+                        R[15] = R[15] + (m_immi6 * 2) ;
+                    
+                    }
+                }
                 break;
-                case 0b0011:
+                case 0b1001:
+                case 0b1011: // branch if not zero
+                {
+                    unsigned int m_rn = inst & 0x7;
+
+                    if(!Itblock() && m_rn != 0) {
+
+                        unsigned int m_immi6 = inst & 0xf8 ;
+
+                        if(inst & 0x200)
+                            m_immi6 = m_immi6 | 0x20 ;
+
+                        R[15] = R[15] + (m_immi6 * 2) ;
+                    
+                    }
+                }
+                break;
+                case 0b0100:
+                case 0b0101: // copy from memory to registers based on stack value
+                {
+                    unsigned int m_reglist9 = inst & 0x1f;
+
+                    for(int i=0;i<9;i++){
+                        if(m_reglist9 & 0x1){
+                            
+                            bus.read(R[13],(unsigned char *)&R[i],4);
+
+                            R[13] = R[13] - 4 ;
+                        }
+                        m_reglist9 = m_reglist9 >> 1;
+                    }
+                }
+                break;
+                case 0b1100:
+                case 0b1101: // copy registers to memory based on stack value
+                {
+                    unsigned int m_reglist9 = inst & 0x1f;
+
+                    for(int i=0;i<9;i++){
+                        if(m_reglist9 & 0x1){
+                            
+                            bus.write(R[13],(unsigned char *)&R[i],4);
+
+                            R[13] = R[13] + 4 ;
+                        }
+                        m_reglist9 = m_reglist9 >> 1;
+                    }
+                }
+                break;
+                case 0b1010:
+                {
+                    unsigned int m_rd = inst & 0x7 ;
+
+                    unsigned int m_rm = inst & 0x38 ;
+
+                    m_rm = m_rm >> 3 ;
+
+                    unsigned int m_op = inst & 0xc0 ;
+
+                    m_op = m_op >> 6 ;
+
+                    if(m_op == 0) { // Reverse a register value
+                        ((unsigned char *)&R[m_rd])[3] = ((unsigned char *)&R[m_rm])[0] ;
+                        ((unsigned char *)&R[m_rd])[2] = ((unsigned char *)&R[m_rm])[1] ;
+                        ((unsigned char *)&R[m_rd])[1] = ((unsigned char *)&R[m_rm])[2] ;
+                        ((unsigned char *)&R[m_rd])[0] = ((unsigned char *)&R[m_rm])[3] ;
+                    } else if (m_op == 1) { // Reverse a halfword value
+                        ((unsigned char *)&R[m_rd])[3] = ((unsigned char *)&R[m_rm])[2] ;
+                        ((unsigned char *)&R[m_rd])[2] = ((unsigned char *)&R[m_rm])[3] ;
+                        ((unsigned char *)&R[m_rd])[1] = ((unsigned char *)&R[m_rm])[0] ;
+                        ((unsigned char *)&R[m_rd])[0] = ((unsigned char *)&R[m_rm])[1] ;
+                    } else if (m_op == 3) { // Reverse signed halfword value
+                        ((unsigned char *)&R[m_rd])[1] = ((unsigned char *)&R[m_rm])[0] ;
+                        ((unsigned char *)&R[m_rd])[0] = ((unsigned char *)&R[m_rm])[1] ;
+
+                        if(R[m_rd] & 0x80) {
+                            R[m_rd] = R[m_rd] | 0xffff0000 ;
+                        }
+                    }
+                }
+                break;
+                case 0b1111:
+                    unsigned int m_op = inst & 0x0f ;
+
+                    if(m_op == 0){
+                        //NOP instruction
+                    } else if(m_op == 0x10){
+                        //Yield instruction
+                    } else if(m_op == 0x20){
+                        //Wait for Event. Switch to lowest power state and waits for event to wake up
+                    } else if(m_op == 0x30){
+                        //Wait for Interrupt. Switch to lowest power state and waits for interrupt to wake up
+                    } else if(m_op == 0x40){
+                        //Send a event in multi-processor system
+                    }
                 break;
             }
 
@@ -849,11 +959,39 @@
             ZCLR();
             NCLR();
 
-        } else if (TH_FMT_16(inst)){
-
         } else if (TH_FMT_17(inst)){
+            
+            SPSR_svc = CPSR;
 
-        } else if (TH_FMT_18(inst)){
+            //R[14] = R [15];
+
+            Intruppted = true ;
+
+            Intr_Mode = SVC_MODE ;
+
+            LReg[SVC_MODE] = R[15];
+
+            R[15] = VT_SOFTWARE_INTR ;
+
+            //processor_busy = false ;
+            VCLR();
+            CCLR();
+            ZCLR();
+            NCLR();
+
+        } else if (TH_FMT_16(inst) || TH_FMT_18(inst)){
+
+            //unconditional branch
+            if(!Itblock()) {
+                unsigned int m_offset = 0;
+
+                if(TH_FMT_18(inst))
+                    m_offset = inst & 0x7ff ;
+                else
+                    m_offset = inst & 0xff ;
+
+                R[15] = R[15] + m_offset ;
+            }
 
         } else if (TH_FMT_19(inst)){
 

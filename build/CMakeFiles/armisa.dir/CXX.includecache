@@ -57,6 +57,8 @@ ARM_CORE.h
 /home/pradeep/Desktop/ARMISA/armisa/Processor/ARM_CORE.h
 ThumbDefs.h
 /home/pradeep/Desktop/ARMISA/armisa/Processor/ThumbDefs.h
+PeripheralDefs.h
+/home/pradeep/Desktop/ARMISA/armisa/Processor/PeripheralDefs.h
 
 /home/pradeep/Desktop/ARMISA/armisa/SRAM/SRAMMem.cpp
 systemc.h

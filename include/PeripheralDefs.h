@@ -28,6 +28,7 @@
 
 #define VT_IN_SP_VAL_ADDR      0x0
 #define VT_RESET               0x4
+#define VT_SOFTWARE_INTR       0x8
 
 // Declare all peripherals here
 

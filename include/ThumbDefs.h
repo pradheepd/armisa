@@ -35,7 +35,7 @@
 
 #define TH_FMT_13(a) ((((B15 | B14 | B13 | B12 | B11 | B10 | B09 | B08) & a) == 0xb000)?true:false)
 
-#define TH_FMT_14(a) ((((B15 | B14 | B13 | B12 | B10 | B09) & a) == 0xb400)?true:false)
+#define TH_FMT_14(a) ((((B15 | B14 | B13 | B12) & a) == 0xb000)?true:false)
 
 #define TH_FMT_15(a) ((((B15 | B14 | B13 | B12) & a) == 0xc000)?true:false)
 

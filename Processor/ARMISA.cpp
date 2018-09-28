@@ -570,7 +570,7 @@ SC_MODULE(ARM_FLASH) {
 
             LReg[SVC_MODE] = R[15];
 
-            R[15] = 0x08 ;
+            R[15] = VT_SOFTWARE_INTR ;
 
             //processor_busy = false ;
             VCLR();
@@ -1590,11 +1590,13 @@ SC_MODULE(ARM_FLASH) {
             sram_wsignal = false;
         }*/
         if(!b_thumb){
-            bus.read(R[15],(unsigned char *)inst,4);
+            bus.read(R[15],(unsigned char *)&inst,4);
             // increment program counter
             R[15] = R[15] + 4;
         }else{
-            bus.read(R[15],(unsigned char *)inst,2);
+            bus.read(R[15],(unsigned char *)&inst,2);
+
+            inst = inst & 0x0000ffff ;
             // increment program counter
             R[15] = R[15] + 2;
         }

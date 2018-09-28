@@ -457,6 +457,7 @@ CMakeFiles/armisa.dir/Processor/ARMISA.cpp.o
  /usr/local/systemc/include/systemc.h
 CMakeFiles/armisa.dir/Processor/Thumbisa.cpp.o
  ../include/ARM_CORE.h
+ ../include/PeripheralDefs.h
  ../include/ProcessorBus.h
  ../include/ThumbDefs.h
  /home/pradeep/Desktop/ARMISA/armisa/Processor/Thumbisa.cpp
