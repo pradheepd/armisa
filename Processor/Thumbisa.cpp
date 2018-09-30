@@ -755,16 +755,16 @@
 
         } else if (TH_FMT_14(inst)){
 
-            unsigned int m_op = 0x0f00 ;
+            unsigned int m_op = inst & 0x0f00 ;
 
             m_op = m_op >> 8 ;
 
             switch(m_op) {
                 case 0b0010:
                 {
-                    unsigned int m_rd = 0x7 ;
+                    unsigned int m_rd = inst & 0x7 ;
 
-                    unsigned int m_rm = 0x38 ;
+                    unsigned int m_rm = inst & 0x38 ;
 
                     m_rm = m_rm >> 3 ;
 
@@ -894,19 +894,30 @@
                 }
                 break;
                 case 0b1111:
-                    unsigned int m_op = inst & 0x0f ;
+                {
+                    unsigned int m_mask = inst & 0x0f;
+                    
+                    unsigned int m_op = inst & 0xf0 ;
+                    
+                    m_op = m_op >> 4;
+                    
+                    if(m_mask == 0) {
 
-                    if(m_op == 0){
-                        //NOP instruction
-                    } else if(m_op == 0x10){
-                        //Yield instruction
-                    } else if(m_op == 0x20){
-                        //Wait for Event. Switch to lowest power state and waits for event to wake up
-                    } else if(m_op == 0x30){
-                        //Wait for Interrupt. Switch to lowest power state and waits for interrupt to wake up
-                    } else if(m_op == 0x40){
-                        //Send a event in multi-processor system
+                        if(m_op == 0){
+                            //NOP instruction
+                        } else if(m_op == 0x1){
+                            //Yield instruction
+                        } else if(m_op == 0x2){
+                            //Wait for Event. Switch to lowest power state and waits for event to wake up
+                        } else if(m_op == 0x3){
+                            //Wait for Interrupt. Switch to lowest power state and waits for interrupt to wake up
+                        } else if(m_op == 0x4){
+                            //Send a event in multi-processor system
+                        }
+                    } else { // IT instructions
+                        
                     }
+                }
                 break;
             }
 
