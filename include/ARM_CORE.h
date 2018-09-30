@@ -170,9 +170,10 @@ typedef enum {
 
 class ARM_CORE : public sc_module
 {
+public:
     //system clock
     sc_in<bool>          sclk;
-       
+private:
     //s bit
     bool                 s_bit;
     

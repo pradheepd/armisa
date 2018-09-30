@@ -1,6 +1,5 @@
 dependencies: \
-  /Users/pradeep/Documents/IOT_proj/ARMISA/Processor/Thumbisa.cpp \
-  /Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../include/ARM_CORE.h \
+  /Users/pradeep/Documents/IOT_proj/ARMISA/Flash/IntnalMem.cpp \
   /Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../../systemc-2.3.2/src/systemc.h \
   /Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../../systemc-2.3.2/src/systemc \
   /Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../../systemc-2.3.2/src/sysc/kernel/sc_cmnhdr.h \
@@ -103,6 +102,5 @@ dependencies: \
   /Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../../systemc-2.3.2/src/sysc/packages/boost/utility/string_view_fwd.hpp \
   /Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../../systemc-2.3.2/src/sysc/utils/sc_vector.h \
   /Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../../systemc-2.3.2/src/sysc/packages/boost/utility/enable_if.hpp \
-  /Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../include/ProcessorBus.h \
-  /Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../include/ThumbDefs.h \
-  /Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../include/PeripheralDefs.h
+  /Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../include/PeripheralDefs.h \
+  /Users/pradeep/Documents/IOT_proj/ARMISA/XCode/../include/ProcessorBus.h

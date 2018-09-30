@@ -44,6 +44,7 @@ class FLASH : public sc_module{
     ProcessorBus_Slave_b slaveb;
 public :
     FLASH(const char *);
+    bool Load_Program(const char*);
 };
 
 //sram

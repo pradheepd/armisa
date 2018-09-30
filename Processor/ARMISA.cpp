@@ -2,7 +2,6 @@
 #include "fstream"
 #include "ARM_CORE.h"
 #include "PeripheralDefs.h"
-#include "libelf.h"
 
 #if 0
 // sram module
@@ -531,7 +530,7 @@ SC_MODULE(ARM_FLASH) {
 
         check_inst = check_inst >> 20 ;
 
-        if( check_inst = IN_SDS_B || check_inst == IN_SDS_W ) {
+        if( check_inst == IN_SDS_B || check_inst == IN_SDS_W ) {
             
             unsigned int temp_reg = inst & 0x00000ff0 ;
 
@@ -1647,6 +1646,8 @@ SC_MODULE(ARM_FLASH) {
 int sc_main (int argc, char* argv[]) {
 
     sc_clock clock ("system_clock",1,0.5);
+    
+    FLASH flash("flash_mem");
 
     /*if(argc < 2) {
         cout << "Program bin file not provided" << endl;
@@ -1655,12 +1656,12 @@ int sc_main (int argc, char* argv[]) {
         if(!flash.Load_Program(argv[1]))
             exit(1);
     }*/
+    
     INTRNAL internal("Internal_mem");
-    FLASH flash("flash_mem");
     SRAM sram("sram_mem");
     ARM_CORE processor("PROCESSOR");
-    /*processor.sclk(clock);
-    processor.busintrf(flash.intrp);
+    processor.sclk(clock);
+    /*processor.busintrf(flash.intrp);
     processor.busintrs(sram.intrp);
 
     flash.sclk(clock);
@@ -1668,4 +1669,5 @@ int sc_main (int argc, char* argv[]) {
 
     sc_start();
 
+    return 0;
 }

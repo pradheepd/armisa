@@ -56,6 +56,7 @@ int BusTop::getInterConnectID(sc_dt::uint64 start, sc_dt::uint64 end)
         if(start >= it->second->start && end <= it->second->end)
             return it->first;
     }
+    return -1;
 }
 
 bool BusTop::write(sc_dt::uint64 addr, unsigned char *data, sc_dt::uint64 datalen)
@@ -230,7 +231,8 @@ bool BusTop::bus_write(int id, sc_dt::uint64 addr, unsigned char *data, sc_dt::u
 
     if(it != ICMap.end())
         return it->second->t->bus_write(addr, data, datalen, e, err);
-
+    
+    return false;
 }
 
 BusTop::~BusTop()

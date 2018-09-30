@@ -992,6 +992,12 @@
 
                 R[15] = R[15] + m_offset ;
             }
+            
+            //processor_busy = false ;
+            VCLR();
+            CCLR();
+            ZCLR();
+            NCLR();
 
         } else if (TH_FMT_19(inst)){
 
