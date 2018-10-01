@@ -1045,7 +1045,9 @@
                     if(m_fst == 0b0101 && m_snd == 0b1000){
                         //set endianess bit
                         CPSR = CPSR | 0x200 ;
-                    }
+                    }/* else if(m_fst = 0){
+
+                    }*/
 
                 }
                 break;
