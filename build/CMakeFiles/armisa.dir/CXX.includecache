@@ -33,6 +33,8 @@ stdio.h
 /home/pradeep/Desktop/ARMISA/armisa/Flash/stdio.h
 gelf.h
 -
+fcntl.h
+-
 
 /home/pradeep/Desktop/ARMISA/armisa/Flash/IntnalMem.cpp
 systemc.h
@@ -49,8 +51,6 @@ ARM_CORE.h
 /home/pradeep/Desktop/ARMISA/armisa/Processor/ARM_CORE.h
 PeripheralDefs.h
 /home/pradeep/Desktop/ARMISA/armisa/Processor/PeripheralDefs.h
-libelf.h
-/home/pradeep/Desktop/ARMISA/armisa/Processor/libelf.h
 
 /home/pradeep/Desktop/ARMISA/armisa/Processor/Thumbisa.cpp
 ARM_CORE.h

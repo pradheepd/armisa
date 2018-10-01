@@ -217,11 +217,6 @@ SC_MODULE(ARM_FLASH) {
     }
 };
 #endif
-
-    bool ARM_CORE::Itblock(){
-        //implement IT block here
-        return true;
-    }
     
     unsigned int ARM_CORE::logic_shift_left(unsigned int reg, unsigned int s){
         
@@ -478,6 +473,7 @@ SC_MODULE(ARM_FLASH) {
             // check if to change to thumb mode
             if(R[rm] & 0x01){
                 b_thumb = true;
+                CPSR = CPSR | 0x20 ;
             }
 
             //Move the value of register to PC
@@ -509,6 +505,12 @@ SC_MODULE(ARM_FLASH) {
             if( offset & 0x00200000) {
                 offset = offset | 0xffa00000 ; 
             }
+
+            // check if to change to thumb mode
+            /*if(offset & 0x01){ //commented as its shifted left
+                b_thumb = true;
+                CPSR = CPSR | 0x20 ;
+            }*/
 
             if(IN_BL == check_inst)
                 R[14] = R[15];
@@ -559,13 +561,15 @@ SC_MODULE(ARM_FLASH) {
 
         if (check_inst == 0b1111) {
 
-            SPSR_svc = CPSR;
+            SPSR_exc[SVC_MODE] = CPSR;
 
             //R[14] = R [15];
 
             Intruppted = true ;
 
             Intr_Mode = SVC_MODE ;
+
+            //CCPSR = &
 
             LReg[SVC_MODE] = R[15];
 
@@ -1366,9 +1370,11 @@ SC_MODULE(ARM_FLASH) {
             {
                 R[rd] = operand2;
 
-                if(s_bit && Intruppted && rd == 15) {
+                if(s_bit && Intruppted && operand2 == 14 && rd == 15) {
                     R[15] = LReg[Intr_Mode] ;
                     Intruppted = false;
+
+                    CPSR = SPSR_exc[Intr_Mode] ;
                 }
                 
                 if(s_bit) {
@@ -1503,8 +1509,15 @@ SC_MODULE(ARM_FLASH) {
                     execute_inst();
                     break;
             };
-        } else
-            execute_thumb_inst();
+        } else {
+            if(ITMask == 0 || ITMask == 0x8)
+                execute_thumb_inst();
+            else{
+                if(Itblock()){
+                    execute_thumb_inst();
+                }
+            }
+        }
         //if ( cycles != 0 && b_thumb == false)
         //    execute_inst();
     }
@@ -1604,8 +1617,9 @@ SC_MODULE(ARM_FLASH) {
     }
 
     ARM_CORE::ARM_CORE(const char *name) : sc_module(name), immi(0), rot(0), b_thumb(false),
-     s_bit(false), immi_bit(false), shift(0), rm(0), rn(0), rd(0), CPSR(0),SPSR(0),
-     Intruppted(false), Intr_Mode(SVC_MODE), bus("armcore_master"), halfword_transfer(false)
+     s_bit(false), immi_bit(false), shift(0), rm(0), rn(0), rd(0), CPSR(0),SPSR(0), CCPSR(&CPSR),
+     Intruppted(false), Intr_Mode(SVC_MODE), bus("armcore_master"), halfword_transfer(false),
+     IT_cond_base(0), ITMask(0)
      /*,flash_rsignal("FL_RS"),
      sram_rsignal("SR_RS"),
      flash_wsignal("FL_WS"),

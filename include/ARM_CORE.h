@@ -228,6 +228,8 @@ private:
     //Interrupted mode
     Interrupt_Mode Intr_Mode;
 
+    //CPSR pointer for currently used CPSR for Norm, SVC, IRQ, FIQ
+    unsigned int *CCPSR;
 
     //Link register when in SVC, IRQ and FIQ
     unsigned int LReg[3];
@@ -238,11 +240,11 @@ private:
     //Saved Program Status Register
     unsigned int SPSR;
 
-    unsigned int SPSR_svc;
+    unsigned int SPSR_exc[3];
 
-    unsigned int SPSR_irq;
+    //unsigned int SPSR_irq;
 
-    unsigned int SPSR_fiq;
+    //unsigned int SPSR_fiq;
 
     //Interrupt mask register
     unsigned int IMR;
@@ -257,6 +259,12 @@ private:
     //BT_opts Bt_opts;
 
     //sc_fifo<unsigned int> BT_RegList;
+
+    //IT cond base
+    unsigned int IT_cond_base;
+
+    //IT mask
+    unsigned int ITMask;
 
     //Returns if IT block is active in thumb state
     bool Itblock();
@@ -281,6 +289,9 @@ private:
 
     //Process initial condition ARM state
     void process_condition();
+
+    //Check Condition codes
+    bool CheckCondCodes(unsigned int code);
 
     //Main Process thread
     void process();

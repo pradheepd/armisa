@@ -2,6 +2,96 @@
 #include "ThumbDefs.h"
 #include "PeripheralDefs.h"
 
+    bool ARM_CORE::CheckCondCodes(unsigned int code){
+        bool m_ret = false;
+
+        switch ( code ){
+                case COND_EQ:
+                    if(IS_ZSET())
+                        m_ret = true;
+                    break;
+                case COND_NE:
+                    if(IS_ZCLR())
+                        m_ret = true;
+                    break;
+                case COND_CS:
+                    if(IS_CSET())
+                        m_ret = true;
+                    break;
+                case COND_CC:
+                    if(IS_CCLR())
+                        m_ret = true;
+                    break;
+                case COND_MI:
+                    if(IS_NSET())
+                        m_ret = true;
+                    break;
+                case COND_PL:
+                    if(IS_NCLR())
+                        m_ret = true;
+                    break;
+                case COND_VS:
+                    if(IS_VSET())
+                        m_ret = true;
+                    break;
+                case COND_VC:
+                    if(IS_VCLR())
+                        m_ret = true;
+                    break;
+                case COND_HI:
+                    if(IS_CSET() && IS_ZCLR())
+                        m_ret = true;
+                    break;
+                case COND_LS:
+                    if(IS_CCLR() && IS_ZSET())
+                        m_ret = true;
+                    break;
+                case COND_GE:
+                    if((IS_NSET() && IS_VSET()) || (IS_NCLR() && IS_VCLR()))
+                        m_ret = true;
+                    break;
+                case COND_LT:
+                    if((IS_NSET() && IS_VCLR()) || (IS_NCLR() && IS_VSET()))
+                        m_ret = true;
+                    break;
+                case COND_GT:
+                    if(IS_ZCLR() && ((IS_NSET() && IS_VSET()) || (IS_NCLR() && IS_VCLR())))
+                        m_ret = true;
+                    break;
+                case COND_LE:
+                    if(IS_ZSET() && ((IS_NSET() && IS_VCLR()) || (IS_NCLR() && IS_VSET())))
+                        m_ret = true;
+                    break;
+                case COND_AL:
+                default:
+                    m_ret = true;
+                    break;
+        }
+
+        return m_ret;
+    }
+
+    bool ARM_CORE::Itblock(){
+
+        if(ITMask == 0 || ITMask == 0x8)
+        {
+            IT_cond_base = 0;
+            ITMask = 0;
+            return false;
+        }
+
+        ITMask = ITMask << 1 ;
+
+        CPSR = CPSR | ((ITMask | 0x03) << 25) ;
+        CPSR = CPSR | ((ITMask >> 2) << 10) ;
+
+        if(CheckCondCodes(IT_cond_base) == ((ITMask & 0x8) != 0x0?true:false)){
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     void ARM_CORE::execute_thumb_inst(){
         
         if(TH_FMT_02(inst)){
@@ -91,6 +181,14 @@
             unsigned int op = inst & 0x1800 ;
 
             if( op == 0 && off5 == 0 && !Itblock()){
+                
+                if(Intruppted == true && rd == 15 && rs == 14){ // return from exception
+                    R[15] = LReg[Intr_Mode];
+                    Intruppted = false;
+
+                    CPSR = SPSR_exc[Intr_Mode] ;
+                }
+                
                 //move register
                 R[rd] = R[rs] ;
 
@@ -464,6 +562,13 @@
                         NCLR();
                 break;
                 case 0b10: //mov
+                    if(Intruppted == true && m_rd == 15 && m_rs == 14){ // return from exception
+                        R[15] = LReg[Intr_Mode];
+                        Intruppted = false;
+
+                        CPSR = SPSR_exc[Intr_Mode] ;
+                    }
+
                     R[m_rd] = R[m_rs] ;
                     VCLR();
                     CCLR();
@@ -808,7 +913,10 @@
                             m_immi6 = m_immi6 | 0x20 ;
 
                         R[15] = R[15] + (m_immi6 * 2) ;
-                    
+
+                        //b_thumb = false;  //commented as multiplied by 2
+                        //CPSR = CPSR & 0xffffffdf ;
+
                     }
                 }
                 break;
@@ -826,6 +934,8 @@
 
                         R[15] = R[15] + (m_immi6 * 2) ;
                     
+                        //b_thumb = false; //commented as multiplied by 2
+                        //CPSR = CPSR & 0xffffffdf ;
                     }
                 }
                 break;
@@ -915,8 +1025,28 @@
                             //Send a event in multi-processor system
                         }
                     } else { // IT instructions
-                        
+                        IT_cond_base = m_op ;
+                        ITMask = m_mask ;//(m_mask << 1) | 0x01 ;
+
+                        CPSR = CPSR | ((ITMask | 0x03) << 25) ;
+                        CPSR = CPSR | ((ITMask >> 2) << 10) ;
+                        CPSR = CPSR | (IT_cond_base << 12) ;
                     }
+                }
+                break;
+                case 0b0110:
+                {
+                    unsigned int m_snd = inst & 0x0f ;
+
+                    unsigned int m_fst = inst & 0xf0 ;
+
+                    m_fst = m_fst >> 4 ;
+
+                    if(m_fst == 0b0101 && m_snd == 0b1000){
+                        //set endianess bit
+                        CPSR = CPSR | 0x200 ;
+                    }
+
                 }
                 break;
             }
@@ -972,7 +1102,7 @@
 
         } else if (TH_FMT_17(inst)){
             
-            SPSR_svc = CPSR;
+            SPSR_exc[SVC_MODE] = CPSR;
 
             //R[14] = R [15];
 
@@ -983,6 +1113,9 @@
             LReg[SVC_MODE] = R[15];
 
             R[15] = VT_SOFTWARE_INTR ;
+
+            ITMask = 0;
+            IT_cond_base = 0;
 
             //processor_busy = false ;
             VCLR();
@@ -996,12 +1129,31 @@
             if(!Itblock()) {
                 unsigned int m_offset = 0;
 
-                if(TH_FMT_18(inst))
-                    m_offset = inst & 0x7ff ;
-                else
-                    m_offset = inst & 0xff ;
+                bool m_execinst = false ;
 
-                R[15] = R[15] + m_offset ;
+                if(TH_FMT_18(inst)){ // conditional branch
+                    m_offset = inst & 0x7ff ;
+                    m_execinst = true ;
+                } else {
+                    unsigned int m_cond = inst & 0x0f00 ;
+                    m_cond = m_cond >> 8 ;
+
+                    if(CheckCondCodes(m_cond)){
+                        m_execinst = true ;
+                        m_offset = inst & 0xff ;
+                    }
+                    
+                }
+
+                if(m_execinst) {
+                    // check if to change to arm mode
+                    if(m_offset & 0x01 == 0){
+                        b_thumb = false ;
+                        CPSR = CPSR & 0xffffffdf ;
+                    }
+
+                    R[15] = R[15] + m_offset ;
+                }
             }
             
             //processor_busy = false ;
