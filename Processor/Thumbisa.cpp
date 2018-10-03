@@ -1045,7 +1045,7 @@
                     if(m_fst == 0b0101 && m_snd == 0b1000 && !Itblock()){
                         //set endianess bit
                         CPSR = CPSR | 0x200 ;
-                    } else if(m_fst = 0b110 && !Itblock()){ // enable exceptions
+                    } else if(m_fst == 0b110 && !Itblock()){ // enable exceptions
                         if(m_snd & 0x1)
                             CPSR = CPSR & 0xffffffbf ; //clear the bit
 
@@ -1055,7 +1055,7 @@
                         if(m_snd & 0x4)
                             CPSR = CPSR & 0xfffffeff ;
 
-                    } else if(m_fst = 0b111 && !Itblock()){ // disable exceptions
+                    } else if(m_fst == 0b111 && !Itblock()){ // disable exceptions
                         if(m_snd & 0x1)
                             CPSR = CPSR | 0x40 ; // set the bit
 
@@ -1171,7 +1171,7 @@
 
                 if(m_execinst) {
                     // check if to change to arm mode
-                    if(m_offset & 0x01 == 0){
+                    if((m_offset & 0x01) == 0){
                         b_thumb = false ;
                         CPSR = CPSR & 0xffffffdf ;
                     }
@@ -1194,13 +1194,13 @@
 
             R[15] = R[15] + 2 ;
 
-            if( inst & 0x2000000 == 0 ) { //Data Processing instructions
+            if( (inst & 0x2000000) == 0 ) { //Data Processing instructions
 
                 unsigned int m_op = inst &  0x01e0000 ;
 
                 m_op = m_op >> 17 ;
 
-                bool m_sbit = (inst & 0x00100000 == 0)?false:true ;
+                bool m_sbit = ((inst & 0x00100000) == 0)?false:true ;
 
                 unsigned int imm12 = inst & 0xff ;
 
@@ -1480,7 +1480,7 @@
                     break;
                 }
 
-            } else if ( inst & 0x3000000 == 0x2000000 ){ //Add/Sub plain 12 bit immi
+            } else if ( (inst & 0x3000000) == 0x2000000 ){ //Add/Sub plain 12 bit immi
                 
                 unsigned int m_op = inst &  0x00f0000 ;
 
@@ -1522,7 +1522,7 @@
                         R[m_rd] = imm12 ;
                     break;
                 }
-            } else if ( inst & 0x3000000 == 0x3000000 ){
+            } else if ( (inst & 0x3000000) == 0x3000000 ){
                 
                 unsigned int m_op = inst &  0x00e0000 ;
 

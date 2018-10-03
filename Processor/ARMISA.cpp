@@ -686,9 +686,9 @@ SC_MODULE(ARM_FLASH) {
             rd = rd >> 12;
 
             if(check_inst == IN_MRS_C) {
-                R[rd] == CPSR ;
+                R[rd] = CPSR ;
             } else {
-                R[rd] == SPSR ;
+                R[rd] = SPSR ;
             }
 
             //processor_busy = false;
