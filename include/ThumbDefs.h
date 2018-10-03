@@ -45,6 +45,6 @@
 
 #define TH_FMT_18(a) ((((B15 | B14 | B13 | B12 | B11) & a) == 0xe000)?true:false)
 
-#define TH_FMT_19(a) ((((B15 | B14 | B13 | B12) & a) == 0xf000)?true:false)
+#define TH_FMT_19(a) ((((B15 | B14 | B13 | B12 | B11) & a) == 0xf000)?true:false) // 32 bit thumb instruction
 
 #define TH_FMT_20(a) ((((B15 | B14 | B13 | B12 | B11 | B10) & a) == 0x1800)?true:false)

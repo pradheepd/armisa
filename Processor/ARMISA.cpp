@@ -1159,6 +1159,9 @@ SC_MODULE(ARM_FLASH) {
                 if(s_bit) {
                     VCLR();
 
+                    if(R[rd] < R[rn])
+                        CSET();
+
                     if(mult_flag)
                         CCLR();
                     
