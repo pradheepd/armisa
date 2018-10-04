@@ -62,6 +62,11 @@
 #define VSET() ( CPSR = CPSR | 0x10000000 )
 #define VCLR() ( CPSR = CPSR & 0xEFFFFFFF )
 
+#define IS_QSET() (((CPSR & 0x08000000 ) == 0x08000000)?true:false)
+#define IS_QCLR() (((CPSR & 0x08000000 ) != 0x08000000)?true:false)
+#define QSET() ( CPSR = CPSR | 0x08000000 )
+#define QCLR() ( CPSR = CPSR & 0xF8FFFFFF )
+
 //test for immidiate bit
 #define IS_IMMI() ((inst & 0x01000000) == 0x01000000? true:false)
 
@@ -292,6 +297,9 @@ private:
 
     //Check Condition codes
     bool CheckCondCodes(unsigned int code);
+
+    //Do shifting operations Thumb/Thumb2
+    unsigned int DecodeImmShift(unsigned int type, unsigned int shift, unsigned int Reg, bool sbit);
 
     //Main Process thread
     void process();

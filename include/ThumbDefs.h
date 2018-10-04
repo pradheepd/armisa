@@ -8,6 +8,7 @@
 #define B10 0b0000010000000000
 #define B09 0b0000001000000000
 #define B08 0b0000000100000000
+#define B07 0b0000000010000000
 
 #define TH_FMT_02(a) ((((B15 | B14 | B13 | B12 | B11 | B10) & a) == 0x1c00)?true:false)
 
@@ -48,3 +49,13 @@
 #define TH_FMT_19(a) ((((B15 | B14 | B13 | B12 | B11) & a) == 0xf000)?true:false) // 32 bit thumb instruction
 
 #define TH_FMT_20(a) ((((B15 | B14 | B13 | B12 | B11 | B10) & a) == 0x1800)?true:false)
+
+#define TH_FMT_21(a) ((((B15 | B14 | B13 | B12 | B11 | B10 | B09) & a) == 0xea00)?true:false)
+
+#define TH_FMT_22(a) ((((B15 | B14 | B13 | B12 | B11 | B10 | B09 | B08 | B07) & a) == 0xfa00)?true:false)
+
+#define TH_FMT_23(a) ((((B15 | B14 | B13 | B12 | B11 | B10 | B09 | B08 | B07) & a) == 0xfa10)?true:false)
+
+#define TH_FMT_24(a) ((((B15 | B14 | B13 | B12 | B11 | B10 | B09 | B08 | B07) & a) == 0xfb00)?true:false)
+
+#define TH_FMT_25(a) ((((B15 | B14 | B13 | B12 | B11 | B10 | B09 | B08 | B07) & a) == 0xfb10)?true:false)
