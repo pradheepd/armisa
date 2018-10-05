@@ -2310,11 +2310,13 @@
                     }
                     break;
                     case 0b001100 : //UADD16
+                    {
                         unsigned int sum1 = (R[m_rn] & 0xffff) + (R[m_rm] & 0xffff) ;
 
                         unsigned int sum2 = (R[m_rn] & 0xffff0000) + (R[m_rm] & 0xffff0000) ;
 
                         R[m_rd] = ( sum1 & 0xffff ) | ( sum2 & 0xffff0000 ) ;
+                    }
                     break;
 
                 }
