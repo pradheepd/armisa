@@ -337,13 +337,13 @@
                     }
                 break;
                 case 0b0010: //lsl
-                    R[m_rd] = logic_shift_left(m_rd, R[m_rs]);
+                    R[m_rd] = logic_shift_left((m_rd & 0x1f), R[m_rs]);
                 break;
                 case 0b0011: //lsr
-                    R[m_rd] = logic_shift_right(m_rd, R[m_rs]);
+                    R[m_rd] = logic_shift_right((m_rd & 0x1f), R[m_rs]);
                 break;
                 case 0b0100: //asr
-                    R[m_rd] = arith_shift_right(m_rd, R[m_rs]);
+                    R[m_rd] = arith_shift_right((m_rd & 0x1f), R[m_rs]);
                 break;
                 case 0b0101: //adc
                     R[m_rd] = R[m_rd] + R[m_rs];
@@ -1763,6 +1763,8 @@
 
                 bus.read(R[15],(unsigned char *)&inst,2);
 
+                R[15] = R[15] + 2 ;
+
                 unsigned int m_op = inst &  0x01e00000 ;
 
                 m_op = m_op >> 21 ;
@@ -1964,14 +1966,17 @@
                         }
                     }
                     break;
-                    case 0b0010: // move or logical OR
+                    case 0b0010: // move and immediate shift
                     {
+                        if((m_typ == 0b11) && (imm5 == 0))
+                            imm5 = 1 ;
+
                         unsigned int m_shres = DecodeImmShift(m_typ, imm5, m_rm, m_sbit);
 
                         if(m_rn == 0b1111 && m_sbit)
                             R[m_rd] = m_shres ;
-                        else
-                            R[m_rd] = R[m_rn] | m_shres ;
+                        /*else
+                            R[m_rd] = R[m_rn] | m_shres ;*/
 
                         if(m_sbit && !Itblock()) {
                             VCLR();
@@ -2075,10 +2080,241 @@
                             R[m_rd] = m_old ;
                     }
                     break;
+                    case 0b0110: //Pack halfword
+                    {
+                        unsigned int m_shres = DecodeImmShift(m_typ, imm5, m_rm, m_sbit);
+                        
+                        if(m_typ & 0x10) {
+
+                            R[m_rd] = R[m_rn] ;
+
+                            R[m_rd] = R[m_rd] & 0xffff0000 ;
+
+                            R[m_rd] = R[m_rd] | (m_shres & 0x0000ffff) ;
+
+                        } else {
+
+                            R[m_rd] = m_shres ;
+
+                            R[m_rd] = R[m_rd] & 0xffff0000 ;
+
+                            R[m_rd] = R[m_rd] | (R[m_rn] & 0x0000ffff) ;
+                        }
+
+                        if(m_sbit && !Itblock()) {
+                            VCLR();
+                            CCLR();
+                            
+                            if(R[rd]== 0)
+                                ZSET();
+                            else
+                                ZCLR();
+                            
+                            if(R[rd] & 0x80000000)
+                                NSET();
+                            else
+                                NCLR();
+                        }
+                    }
+                    break;
                 }
             
         } else if(TH_FMT_22(inst)) {
+            
+            inst = inst << 16 ;
+
+            bus.read(R[15], (unsigned char *)&inst,2) ;
+            R[15] = R[15] + 2 ;
+
+            bool m_isextinst = inst & 0x80 ;
+
+            unsigned int m_op = 0 ;
+
+            bool m_sbit = false ;
+
+            if(!m_isextinst) {
+                m_op = inst & 0x600000 ;
+
+                m_op = m_op >> 21 ;
+
+                m_sbit = ((inst & 0x100000) !=0)?true:false;
+            } else {
+                m_op = inst & 0x700000 ;
+
+                m_op = m_op >> 20 ;
+            } 
+
+            unsigned int m_rn = inst & 0xf0000 ;
+
+            m_rn = m_rn >> 16 ;
+
+            unsigned int m_rd = inst & 0xf00 ;
+
+            m_rn = m_rd >> 8 ;
+
+            unsigned int m_rm = inst & 0xf ;
+
+            unsigned int m_op2 = 0;
+            
+            if(!m_isextinst)
+                m_op2 = inst &0x70 ;
+            else
+                m_op2 = inst &0x30 ;
+
+            m_op2 = m_op2 >> 4 ;
+
+            if(!m_isextinst) {
+                unsigned int m_shres = DecodeImmShift(m_op, (m_rm & 0x1f), m_rm, m_sbit);
+                
+                R[m_rd] = m_shres ;
+            } else {
+                switch (m_op) {
+                    case 0b100 :
+                    {
+                        unsigned int m_shres = DecodeImmShift(0b11, m_op2*8, m_rm, m_sbit);
+
+                        if(m_shres & 0x8)
+                            m_shres = m_shres | 0xffffff00 ;
+                        else
+                            m_shres = m_shres & 0x000000ff ;
+
+                        if(m_rn == 0b1111)                   
+                            R[m_rd] = m_shres ;
+                        else
+                            R[m_rd] = R[m_rn] + m_shres ;
+                    }
+                    break;
+                    case 0b010 :
+                    {
+                        unsigned int m_shres = DecodeImmShift(0b11, m_op2*8, m_rm, m_sbit);
+
+                        m_shres = m_shres & 0x00ff00ff ;
+
+                        if(m_shres & 0x8)
+                            m_shres = m_shres | 0x0000ff00 ;
+                        else
+                            m_shres = m_shres & 0xffff00ff ;
+
+                        if(m_shres & 0x800)
+                            m_shres = m_shres | 0xff000000 ;
+                        else
+                            m_shres = m_shres & 0x00ffffff ;
+
+                        unsigned int m_res1 = ((R[m_rn] | 0x0000ffff) + (m_shres | 0x0000ffff)) | 0xffff ;
+
+                        unsigned int m_res2 = ((R[m_rn] | 0xffff0000) + (m_shres | 0xffff0000)) | 0xffff0000 ;
+                        
+                        if(m_rn == 0b1111)
+                            R[m_rd] = m_res1 | m_res2 ;
+                        else
+                            R[m_rd] = R[m_rn] + (m_res1 | m_res2) ;
+                    }
+                    break;
+                    case 0b000 :
+                    {
+                        unsigned int m_shres = DecodeImmShift(0b11, m_op2*8, m_rm, m_sbit);
+
+                        if(m_shres & 0x80)
+                            m_shres = m_shres | 0xffff0000 ;
+                        else
+                            m_shres = m_shres & 0x0000ffff ;
+                        
+                        if(m_rn == 0b1111)
+                            R[m_rd] = m_shres ;
+                        else                            
+                            R[m_rd] = R[m_rn] + m_shres ;
+                    }
+                    break;
+                    case 0b101 :
+                    {
+                        unsigned int m_shres = DecodeImmShift(0b11, m_op2*8, m_rm, m_sbit);
+
+                        m_shres = m_shres & 0x000000ff ;
+
+                        if(m_rn == 0b1111)                   
+                            R[m_rd] = m_shres ;
+                        else
+                            R[m_rd] = R[m_rn] + m_shres ;
+                    }
+                    break;
+                    case 0b011 :
+                    {
+                        unsigned int m_shres = DecodeImmShift(0b11, m_op2*8, m_rm, m_sbit);
+
+                        m_shres = m_shres & 0x00ff00ff ;
+
+                        unsigned int m_res1 = ((R[m_rn] | 0x0000ffff) + (m_shres | 0x0000ffff)) | 0xffff ;
+
+                        unsigned int m_res2 = ((R[m_rn] | 0xffff0000) + (m_shres | 0xffff0000)) | 0xffff0000 ;
+                        
+                        if(m_rn == 0b1111)
+                            R[m_rd] = m_res1 | m_res2 ;
+                        else
+                            R[m_rd] = R[m_rn] + (m_res1 | m_res2) ;
+                    }
+                    break;
+                    case 0b001 :
+                    {
+                        unsigned int m_shres = DecodeImmShift(0b11, m_op2*8, m_rm, m_sbit);
+                        
+                        m_shres = m_shres & 0x0000ffff ;
+                        
+                        if(m_rn == 0b1111)
+                            R[m_rd] = m_shres ;
+                        else                            
+                            R[m_rd] = R[m_rn] + m_shres ;
+                    }
+                    break;
+                }
+            }
+            
         } else if(TH_FMT_23(inst)) {
+            inst = inst << 16 ;
+
+            bus.read(R[15], (unsigned char *)&inst,2) ;
+            R[15] = R[15] + 2 ;
+
+            bool m_isodpinst = inst & 0x80 ;
+
+            unsigned int m_op = inst & 0x700000 ;
+
+            m_op = m_op >> 20 ;             
+
+            unsigned int m_rn = inst & 0xf0000 ;
+
+            m_rn = m_rn >> 16 ;
+
+            unsigned int m_rd = inst & 0xf00 ;
+
+            m_rn = m_rd >> 8 ;
+
+            unsigned int m_rm = inst & 0xf ;
+
+            unsigned int m_op2 = inst &0x70 ;
+
+            m_op2 = m_op2 >> 4 ;
+
+            if(!m_isodpinst) {
+                
+                unsigned int m_opPpre = (m_op << 3) | m_op2 ;
+                
+                switch(m_opPpre){
+                    
+                    case 0b001001 : //QADD16
+                    {
+                        unsigned int sum1 = (R[m_rn] & 0xffff) + (R[m_rm] & 0xffff) ;
+
+                        unsigned int sum2 = (R[m_rn] & 0xffff0000) + (R[m_rm] & 0xffff0000) ;
+
+                        R[m_rd] = ( sum1 & 0xffff ) | ( sum2 & 0xffff0000 ) ;
+                    }
+                    break;
+
+                }
+            } else {
+
+            }
+
         } else if(TH_FMT_24(inst)) {
         } else if(TH_FMT_25(inst)) {
         } else {
@@ -2110,9 +2346,12 @@ unsigned int ARM_CORE::DecodeImmShift(unsigned int type, unsigned int shift, uns
         break;
         case 0b01: //LSR
         {
-            bool m_LSbit = ((R[Reg] & (0x1 << (shift-1)))!= 0)?true:false;
+            if(shift == 0)
+                shift = 32 ;
+            
+            bool m_LSbit = ((R[Reg] & (0x1 << (shift-2)))!= 0)?true:false;
 
-            Result = R[Reg] >> shift ;
+            Result = R[Reg] >> (shift-1) ;
 
             if(sbit && m_LSbit && !Itblock())
                 CSET();
@@ -2120,13 +2359,16 @@ unsigned int ARM_CORE::DecodeImmShift(unsigned int type, unsigned int shift, uns
         break;
         case 0b10: //ASR
         {
-            bool m_LSbit = ((R[Reg] & (0x1 << (shift-1)))!= 0)?true:false;
+            if(shift == 0)
+                shift = 32 ;
+
+            bool m_LSbit = ((R[Reg] & (0x1 << (shift-2)))!= 0)?true:false;
 
             bool m_HSbit = ((R[Reg] & 0x80000000)!= 0)?true:false;
 
-            Result = R[Reg] >> shift ;
+            Result = R[Reg] >> (shift-1) ;
 
-            for(int m_i=31;m_i>(31-shift);m_i--){
+            for(int m_i=31;m_i>(31-(shift-1));m_i--){
                 Result = Result | (0x1 << m_i) ;
             }
 
