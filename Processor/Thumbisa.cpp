@@ -2294,9 +2294,9 @@
 
             m_op2 = m_op2 >> 4 ;
 
+            unsigned int m_opPpre = (m_op << 3) | m_op2 ;
+
             if(!m_isodpinst) {
-                
-                unsigned int m_opPpre = (m_op << 3) | m_op2 ;
                 
                 switch(m_opPpre){
                     
@@ -2318,10 +2318,309 @@
                         R[m_rd] = ( sum1 & 0xffff ) | ( sum2 & 0xffff0000 ) ;
                     }
                     break;
+                    case 0b000001: //QADD8
+                    {
+                        unsigned int sum1 = ((R[m_rn] & 0x000000ff) + (R[m_rm] & 0x000000ff)) & 0x000000ff ;
+                        unsigned int sum2 = ((R[m_rn] & 0x0000ff00) + (R[m_rm] & 0x0000ff00)) & 0x0000ff00 ;
+                        unsigned int sum3 = ((R[m_rn] & 0x00ff0000) + (R[m_rm] & 0x00ff0000)) & 0x00ff0000 ;
+                        unsigned int sum4 = ((R[m_rn] & 0xff000000) + (R[m_rm] & 0xff000000)) & 0xff000000 ;
 
+                        R[m_rd] = sum1 | sum2 | sum3 | sum4 ;
+                    }
+                    break;
+                    case 0b000100: //UADD8
+                    {
+                        unsigned int m_sum1 = ((R[m_rn] & 0x000000ff) + (R[m_rm] & 0x000000ff)) & 0x000000ff ;
+                        unsigned int m_sum2 = ((R[m_rn] & 0x0000ff00) + (R[m_rm] & 0x0000ff00)) & 0x0000ff00 ;
+                        unsigned int m_sum3 = ((R[m_rn] & 0x00ff0000) + (R[m_rm] & 0x00ff0000)) & 0x00ff0000 ;
+                        unsigned int m_sum4 = ((R[m_rn] & 0xff000000) + (R[m_rm] & 0xff000000)) & 0xff000000 ;
+
+                        R[m_rd] = m_sum1 | m_sum2 | m_sum3 | m_sum4 ;
+                    }
+                    break;
+                    case 0b010001: //QASX
+                    {
+                        unsigned int m_res1 = ((R[m_rn] & 0x0000ffff) - ((R[m_rm] & 0xffff0000) >> 16) ) & 0x0000ffff ;
+                        unsigned int m_res2 = ((R[m_rm] & 0x0000ffff) + ((R[m_rn] & 0xffff0000) >> 16) ) & 0x0000ffff ;
+
+                        R[m_rd] = m_res1 | ( m_res2 << 16 ) ;
+                    }
+                    break;
+                    case 0b010100: //UASX
+                    {
+                        unsigned int m_res1 = ((R[m_rn] & 0x0000ffff) - ((R[m_rm] & 0xffff0000) >> 16) ) & 0x0000ffff ;
+                        unsigned int m_res2 = ((R[m_rm] & 0x0000ffff) + ((R[m_rn] & 0xffff0000) >> 16) ) & 0x0000ffff ;
+
+                        R[m_rd] = m_res1 | ( m_res2 << 16 ) ;
+                    }
+                    break;
+                    case 0b101001: //QSUB16
+                    {
+                        unsigned int m_res1 = ((R[m_rn] & 0x0000ffff) - (R[m_rm] & 0x0000ffff) ) & 0x0000ffff ;
+                        unsigned int m_res2 = ((R[m_rn] & 0xffff0000) - (R[m_rm] & 0xffff0000) ) & 0xffff0000 ;
+
+                        R[m_rd] = m_res1 | m_res2 ;
+                    }
+                    break;
+                    case  0b001110: //UHADD16
+                    {
+                        unsigned int m_res1 = ((R[m_rn] & 0x0000ffff) + (R[m_rm] & 0x0000ffff) ) & 0x0000ffff ;
+                        unsigned int m_res2 = ((R[m_rn] & 0xffff0000) + (R[m_rm] & 0xffff0000) ) & 0xffff0000 ;
+
+                        R[m_rd] = m_res1 | m_res2 ;
+                    }
+                    break;
+                    case 0b100001: //QSUB8
+                    {
+                        unsigned int m_sum1 = ((R[m_rn] & 0x000000ff) - (R[m_rm] & 0x000000ff)) & 0x000000ff ;
+                        unsigned int m_sum2 = ((R[m_rn] & 0x0000ff00) - (R[m_rm] & 0x0000ff00)) & 0x0000ff00 ;
+                        unsigned int m_sum3 = ((R[m_rn] & 0x00ff0000) - (R[m_rm] & 0x00ff0000)) & 0x00ff0000 ;
+                        unsigned int m_sum4 = ((R[m_rn] & 0xff000000) - (R[m_rm] & 0xff000000)) & 0xff000000 ;
+
+                        R[m_rd] = m_sum1 | m_sum2 | m_sum3 | m_sum4 ;
+                    }
+                    break;
+                    case 0b000110: //UHADD8
+                    {
+                        unsigned int m_sum1 = ((R[m_rn] & 0x000000ff) + (R[m_rm] & 0x000000ff)) & 0x000000ff ;
+                        unsigned int m_sum2 = ((R[m_rn] & 0x0000ff00) + (R[m_rm] & 0x0000ff00)) & 0x0000ff00 ;
+                        unsigned int m_sum3 = ((R[m_rn] & 0x00ff0000) + (R[m_rm] & 0x00ff0000)) & 0x00ff0000 ;
+                        unsigned int m_sum4 = ((R[m_rn] & 0xff000000) + (R[m_rm] & 0xff000000)) & 0xff000000 ;
+
+                        R[m_rd] = m_sum1 | m_sum2 | m_sum3 | m_sum4 ;
+                    }
+                    break;
+                    case  0b110001: //QASX
+                    {   unsigned int m_res1 = ((R[m_rn] & 0x0000ffff) + ((R[m_rm] & 0xffff0000) >> 16) ) & 0x0000ffff ;
+                        unsigned int m_res2 = (((R[m_rn] & 0xffff0000) >> 16) - (R[m_rm] & 0x0000ffff) ) & 0x0000ffff ;
+
+                        R[m_rd] = m_res1 | ( m_res2 << 16 ) ;
+                    }
+                    break;
+                    case  0b010110: //UHASX
+                    {   
+                        unsigned int m_res1 = ((R[m_rn] & 0x0000ffff) - ((R[m_rm] & 0xffff0000) >> 16) ) & 0x0000ffff ;
+                        unsigned int m_res2 = (((R[m_rn] & 0xffff0000) >> 16) + (R[m_rm] & 0x0000ffff) ) & 0x0000ffff ;
+
+                        R[m_rd] = m_res1 | ( m_res2 << 16 ) ;
+                    }
+                    break;
+                    case 0b001000 : //SADD16
+                    {
+                        unsigned int sum1 = (R[m_rn] & 0xffff) + (R[m_rm] & 0xffff) ;
+
+                        unsigned int sum2 = (R[m_rn] & 0xffff0000) + (R[m_rm] & 0xffff0000) ;
+
+                        R[m_rd] = ( sum1 & 0xffff ) | ( sum2 & 0xffff0000 ) ;
+                    }
+                    break;
+                    case 0b101110: //UHSUB16
+                    {
+                        unsigned int m_res1 = ((R[m_rn] & 0x0000ffff) - (R[m_rm] & 0x0000ffff) ) & 0x0000ffff ;
+                        unsigned int m_res2 = ((R[m_rn] & 0xffff0000) - (R[m_rm] & 0xffff0000) ) & 0xffff0000 ;
+
+                        R[m_rd] = m_res1 | m_res2 ;
+                    }
+                    break;
+                    case 0b000000: //SADD8
+                    {
+                        unsigned int m_sum1 = ((R[m_rn] & 0x000000ff) + (R[m_rm] & 0x000000ff)) & 0x000000ff ;
+                        unsigned int m_sum2 = ((R[m_rn] & 0x0000ff00) + (R[m_rm] & 0x0000ff00)) & 0x0000ff00 ;
+                        unsigned int m_sum3 = ((R[m_rn] & 0x00ff0000) + (R[m_rm] & 0x00ff0000)) & 0x00ff0000 ;
+                        unsigned int m_sum4 = ((R[m_rn] & 0xff000000) + (R[m_rm] & 0xff000000)) & 0xff000000 ;
+
+                        R[m_rd] = m_sum1 | m_sum2 | m_sum3 | m_sum4 ;
+                    }
+                    break;
+                    case  0b100110: //UHSUB8
+                    {
+                        unsigned int m_sum1 = ((R[m_rn] & 0x000000ff) - (R[m_rm] & 0x000000ff)) & 0x000000ff ;
+                        unsigned int m_sum2 = ((R[m_rn] & 0x0000ff00) - (R[m_rm] & 0x0000ff00)) & 0x0000ff00 ;
+                        unsigned int m_sum3 = ((R[m_rn] & 0x00ff0000) - (R[m_rm] & 0x00ff0000)) & 0x00ff0000 ;
+                        unsigned int m_sum4 = ((R[m_rn] & 0xff000000) - (R[m_rm] & 0xff000000)) & 0xff000000 ;
+
+                        R[m_rd] = m_sum1 | m_sum2 | m_sum3 | m_sum4 ;
+                    }
+                    break;
+                    case  0b010000: //SASX
+                    {
+                        unsigned int m_res1 = ((R[m_rn] & 0x0000ffff) - ((R[m_rm] & 0xffff0000) >> 16) ) & 0x0000ffff ;
+                        unsigned int m_res2 = (((R[m_rn] & 0xffff0000) >> 16) + (R[m_rm] & 0x0000ffff) ) & 0x0000ffff ;
+
+                        R[m_rd] = m_res1 | ( m_res2 << 16 ) ;
+                    }
+                    break ;
+                    case  0b110110: //UHSAX
+                    {
+                        unsigned int m_res1 = ((R[m_rn] & 0x0000ffff) + ((R[m_rm] & 0xffff0000) >> 16) ) & 0x0000ffff ;
+                        unsigned int m_res2 = (((R[m_rn] & 0xffff0000) >> 16) - (R[m_rm] & 0x0000ffff) ) & 0x0000ffff ;
+
+                        R[m_rd] = m_res1 | ( m_res2 << 16 ) ;
+                    }
+                    break ;
+                    case  0b001010: //SHADD16
+                    {
+                        unsigned int m_res1 = ((R[m_rn] & 0x0000ffff) + (R[m_rm] & 0x0000ffff) ) & 0x0000ffff ;
+                        unsigned int m_res2 = ((R[m_rn] & 0xffff0000) + (R[m_rm] & 0xffff0000) ) & 0xffff0000 ;
+
+                        R[m_rd] = m_res1 | m_res2 ;
+                    }
+                    break;
+                    case  0b001101: //UQADD16
+                    {
+                        unsigned int m_res1 = ((R[m_rn] & 0x0000ffff) + (R[m_rm] & 0x0000ffff) ) & 0x0000ffff ;
+                        unsigned int m_res2 = ((R[m_rn] & 0xffff0000) + (R[m_rm] & 0xffff0000) ) & 0xffff0000 ;
+
+                        R[m_rd] = m_res1 | m_res2 ;
+                    }
+                    break;
+                    case  0b000010: //SHADD8
+                    {
+                        unsigned int m_sum1 = ((R[m_rn] & 0x000000ff) + (R[m_rm] & 0x000000ff)) & 0x000000ff ;
+                        unsigned int m_sum2 = ((R[m_rn] & 0x0000ff00) + (R[m_rm] & 0x0000ff00)) & 0x0000ff00 ;
+                        unsigned int m_sum3 = ((R[m_rn] & 0x00ff0000) + (R[m_rm] & 0x00ff0000)) & 0x00ff0000 ;
+                        unsigned int m_sum4 = ((R[m_rn] & 0xff000000) + (R[m_rm] & 0xff000000)) & 0xff000000 ;
+
+                        R[m_rd] = m_sum1 | m_sum2 | m_sum3 | m_sum4 ;
+                    }
+                    break;
+                    case  0b000101: //UQADD8
+                    {
+                        unsigned int m_sum1 = ((R[m_rn] & 0x000000ff) + (R[m_rm] & 0x000000ff)) & 0x000000ff ;
+                        unsigned int m_sum2 = ((R[m_rn] & 0x0000ff00) + (R[m_rm] & 0x0000ff00)) & 0x0000ff00 ;
+                        unsigned int m_sum3 = ((R[m_rn] & 0x00ff0000) + (R[m_rm] & 0x00ff0000)) & 0x00ff0000 ;
+                        unsigned int m_sum4 = ((R[m_rn] & 0xff000000) + (R[m_rm] & 0xff000000)) & 0xff000000 ;
+
+                        R[m_rd] = m_sum1 | m_sum2 | m_sum3 | m_sum4 ;
+                    }
+                    break;
+                    case  0b010010: //SHASX
+                    {
+                        unsigned int m_res1 = ((R[m_rn] & 0x0000ffff) - ((R[m_rm] & 0xffff0000) >> 16) ) & 0x0000ffff ;
+                        unsigned int m_res2 = (((R[m_rn] & 0xffff0000) >> 16) + (R[m_rm] & 0x0000ffff) ) & 0x0000ffff ;
+
+                        R[m_rd] = m_res1 | ( m_res2 << 16 ) ;
+                    }
+                    break;
+                    case  0b010101: //UQASX
+                    {
+                        unsigned int m_res1 = ((R[m_rn] & 0x0000ffff) - ((R[m_rm] & 0xffff0000) >> 16) ) & 0x0000ffff ;
+                        unsigned int m_res2 = (((R[m_rn] & 0xffff0000) >> 16) + (R[m_rm] & 0x0000ffff) ) & 0x0000ffff ;
+
+                        R[m_rd] = m_res1 | ( m_res2 << 16 ) ;
+                    }
+                    break;
+                    case  0b101010: //SHSUB16
+                    {
+                        unsigned int m_res1 = ((R[m_rn] & 0x0000ffff) - (R[m_rm] & 0x0000ffff) ) & 0x0000ffff ;
+                        unsigned int m_res2 = ((R[m_rn] & 0xffff0000) - (R[m_rm] & 0xffff0000) ) & 0xffff0000 ;
+
+                        R[m_rd] = m_res1 | m_res2 ;
+                    }
+                    break;
+                    case  0b101101: //UQSUB16
+                    {
+                        unsigned int m_res1 = ((R[m_rn] & 0x0000ffff) - (R[m_rm] & 0x0000ffff) ) & 0x0000ffff ;
+                        unsigned int m_res2 = ((R[m_rn] & 0xffff0000) - (R[m_rm] & 0xffff0000) ) & 0xffff0000 ;
+
+                        R[m_rd] = m_res1 | m_res2 ;
+                    }
+                    break;
+                    case  0b100010: //SHSUB8
+                    {
+                        unsigned int m_sum1 = ((R[m_rn] & 0x000000ff) - (R[m_rm] & 0x000000ff)) & 0x000000ff ;
+                        unsigned int m_sum2 = ((R[m_rn] & 0x0000ff00) - (R[m_rm] & 0x0000ff00)) & 0x0000ff00 ;
+                        unsigned int m_sum3 = ((R[m_rn] & 0x00ff0000) - (R[m_rm] & 0x00ff0000)) & 0x00ff0000 ;
+                        unsigned int m_sum4 = ((R[m_rn] & 0xff000000) - (R[m_rm] & 0xff000000)) & 0xff000000 ;
+
+                        R[m_rd] = m_sum1 | m_sum2 | m_sum3 | m_sum4 ;
+                    }
+                    break;
+                    case  0b100101: //UQSUB8
+                    {
+                        unsigned int m_sum1 = ((R[m_rn] & 0x000000ff) - (R[m_rm] & 0x000000ff)) & 0x000000ff ;
+                        unsigned int m_sum2 = ((R[m_rn] & 0x0000ff00) - (R[m_rm] & 0x0000ff00)) & 0x0000ff00 ;
+                        unsigned int m_sum3 = ((R[m_rn] & 0x00ff0000) - (R[m_rm] & 0x00ff0000)) & 0x00ff0000 ;
+                        unsigned int m_sum4 = ((R[m_rn] & 0xff000000) - (R[m_rm] & 0xff000000)) & 0xff000000 ;
+
+                        R[m_rd] = m_sum1 | m_sum2 | m_sum3 | m_sum4 ;
+                    }
+                    break;
+                    case  0b110010: //SHSAX
+                    {
+                        unsigned int m_res1 = ((R[m_rn] & 0x0000ffff) + ((R[m_rm] & 0xffff0000) >> 16) ) & 0x0000ffff ;
+                        unsigned int m_res2 = (((R[m_rn] & 0xffff0000) >> 16) - (R[m_rm] & 0x0000ffff) ) & 0x0000ffff ;
+
+                        R[m_rd] = m_res1 | ( m_res2 << 16 ) ;
+                    }
+                    break;
+                    case  0b110101: //UQSAX
+                    {
+                        unsigned int m_res1 = ((R[m_rn] & 0x0000ffff) + ((R[m_rm] & 0xffff0000) >> 16) ) & 0x0000ffff ;
+                        unsigned int m_res2 = (((R[m_rn] & 0xffff0000) >> 16) - (R[m_rm] & 0x0000ffff) ) & 0x0000ffff ;
+
+                        R[m_rd] = m_res1 | ( m_res2 << 16 ) ;
+                    }
+                    break;
+                    case  0b101000: //SSUB16
+                    {
+                        unsigned int m_res1 = ((R[m_rn] & 0x0000ffff) - (R[m_rm] & 0x0000ffff) ) & 0x0000ffff ;
+                        unsigned int m_res2 = ((R[m_rn] & 0xffff0000) - (R[m_rm] & 0xffff0000) ) & 0xffff0000 ;
+
+                        R[m_rd] = m_res1 | m_res2 ;
+                    }
+                    break;
+                    case  0b101100: //USUB16
+                    {
+                        unsigned int m_res1 = ((R[m_rn] & 0x0000ffff) - (R[m_rm] & 0x0000ffff) ) & 0x0000ffff ;
+                        unsigned int m_res2 = ((R[m_rn] & 0xffff0000) - (R[m_rm] & 0xffff0000) ) & 0xffff0000 ;
+
+                        R[m_rd] = m_res1 | m_res2 ;
+                    }
+                    break;
+                    case  0b100000: //SSUB8
+                    {
+                        unsigned int m_sum1 = ((R[m_rn] & 0x000000ff) - (R[m_rm] & 0x000000ff)) & 0x000000ff ;
+                        unsigned int m_sum2 = ((R[m_rn] & 0x0000ff00) - (R[m_rm] & 0x0000ff00)) & 0x0000ff00 ;
+                        unsigned int m_sum3 = ((R[m_rn] & 0x00ff0000) - (R[m_rm] & 0x00ff0000)) & 0x00ff0000 ;
+                        unsigned int m_sum4 = ((R[m_rn] & 0xff000000) - (R[m_rm] & 0xff000000)) & 0xff000000 ;
+
+                        R[m_rd] = m_sum1 | m_sum2 | m_sum3 | m_sum4 ;
+                    }
+                    break;
+                    case  0b100100: //USUB8
+                    {
+                        unsigned int m_sum1 = ((R[m_rn] & 0x000000ff) - (R[m_rm] & 0x000000ff)) & 0x000000ff ;
+                        unsigned int m_sum2 = ((R[m_rn] & 0x0000ff00) - (R[m_rm] & 0x0000ff00)) & 0x0000ff00 ;
+                        unsigned int m_sum3 = ((R[m_rn] & 0x00ff0000) - (R[m_rm] & 0x00ff0000)) & 0x00ff0000 ;
+                        unsigned int m_sum4 = ((R[m_rn] & 0xff000000) - (R[m_rm] & 0xff000000)) & 0xff000000 ;
+
+                        R[m_rd] = m_sum1 | m_sum2 | m_sum3 | m_sum4 ;
+                    }
+                    break;
+                    case  0b110000: //SSAX
+                    {
+                        unsigned int m_res1 = ((R[m_rn] & 0x0000ffff) + ((R[m_rm] & 0xffff0000) >> 16) ) & 0x0000ffff ;
+                        unsigned int m_res2 = (((R[m_rn] & 0xffff0000) >> 16) - (R[m_rm] & 0x0000ffff) ) & 0x0000ffff ;
+
+                        R[m_rd] = m_res1 | ( m_res2 << 16 ) ;
+                    }
+                    break;
+                    case  0b110100: //USAX
+                    {
+                        unsigned int m_res1 = ((R[m_rn] & 0x0000ffff) + ((R[m_rm] & 0xffff0000) >> 16) ) & 0x0000ffff ;
+                        unsigned int m_res2 = (((R[m_rn] & 0xffff0000) >> 16) - (R[m_rm] & 0x0000ffff) ) & 0x0000ffff ;
+
+                        R[m_rd] = m_res1 | ( m_res2 << 16 ) ;
+                    }
+                    break;
                 }
             } else {
-
+                
+                switch(m_opPpre){
+                    case  0b011000: //CLZ count leading zeros
+                    break;
+                }
             }
 
         } else if(TH_FMT_24(inst)) {
