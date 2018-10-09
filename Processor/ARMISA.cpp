@@ -1662,7 +1662,9 @@ SC_MODULE(ARM_FLASH) {
 
 int sc_main (int argc, char* argv[]) {
 
-    sc_clock clock ("system_clock",1,0.5);
+    sc_time clockfreq(13.88,SC_NS); // clock set to 72 Mhz
+
+    sc_clock clock ("system_clock",clockfreq,0.5);
     
     FLASH flash("flash_mem");
 

@@ -2150,7 +2150,7 @@
 
             unsigned int m_rd = inst & 0xf00 ;
 
-            m_rn = m_rd >> 8 ;
+            m_rd = m_rd >> 8 ;
 
             unsigned int m_rm = inst & 0xf ;
 
@@ -2286,7 +2286,7 @@
 
             unsigned int m_rd = inst & 0xf00 ;
 
-            m_rn = m_rd >> 8 ;
+            m_rd = m_rd >> 8 ;
 
             unsigned int m_rm = inst & 0xf ;
 
@@ -2619,12 +2619,421 @@
                 
                 switch(m_opPpre){
                     case  0b011000: //CLZ count leading zeros
+                    {
+                        unsigned int m_msbit = 0x80000000 ;
+
+                        R[m_rd] = 0;
+
+                        while(!(m_msbit & R[m_rm])){
+                            R[m_rd]++ ;
+                            m_msbit = m_msbit >> 1 ;
+                        }
+                    }
+                    break;
+                    case  0b000000: //QADD
+                    {
+                        R[m_rd] = R[m_rn] + R[m_rm] ;
+                    }
+                    break;
+                    case  0b000001: //QDADD
+                    {
+                        R[m_rd] = R[m_rm] + (2*R[m_rn]) ;
+                    }
+                    break;
+                    case  0b000011: //QDSUB
+                    {
+                        R[m_rd] = R[m_rm] - (2*R[m_rn]) ;
+                    }
+                    break;
+                    case  0b000010: //QSUB
+                    {
+                        R[m_rd] = R[m_rm] - R[m_rn] ;
+                    }
+                    break;
+                    case  0b001010: //RBIT reverse bits
+                    {
+                        unsigned int m_bit = 0x1 ;
+                        unsigned int m_dbit = 0x80000000 ;
+
+                        R[m_rd] = 0 ;
+
+                        for(int m_i=0; m_i<32; m_i++){
+                            if(R[m_rm] & m_bit)
+                                R[m_rd] = R[m_rd] | m_dbit ;
+                            else
+                                R[m_rd] = R[m_rd] & (~m_dbit) ;
+
+                            m_bit = m_bit << 1;
+                            m_dbit = m_dbit >> 1;
+                        }
+                    }
+                    break;
+                    case  0b001000: //REV byte reverse word
+                    {
+                        R[m_rd] = R[m_rd] | ((R[m_rm] & 0xff) << 24) ;
+                        R[m_rd] = R[m_rd] | ((R[m_rm] & 0xff00) << 8) ;
+                        R[m_rd] = R[m_rd] | ((R[m_rm] & 0xff0000) >> 8) ;
+                        R[m_rd] = R[m_rd] | ((R[m_rm] & 0xff000000) >> 24) ;
+                    }
+                    break;
+                    case  0b001001: //REV16 reverse packed halfword
+                    {
+                        R[m_rd] = R[m_rd] | ((R[m_rm] & 0xff) << 8) ;
+                        R[m_rd] = R[m_rd] | ((R[m_rm] & 0xff00) >> 8) ;
+                        R[m_rd] = R[m_rd] | ((R[m_rm] & 0xff0000) << 8) ;
+                        R[m_rd] = R[m_rd] | ((R[m_rm] & 0xff000000) >> 8) ;
+                    }
+                    break;
+                    case  0b001011: //REVSH Byte-Reverse Signed Halfword
+                    {
+                        R[m_rd] = R[m_rd] | ((R[m_rm] & 0xff) << 8) ;
+
+                        if(R[m_rd] & 0x8000)
+                            R[m_rd] = R[m_rd] | 0xffff0000 ;
+
+                        R[m_rd] = R[m_rd] | ((R[m_rm] & 0xff00) >> 8) ;
+                    }
+                    break;
+                    case  0b010000: //Select Bytes
+                    {
+                        if(CPSR & 0x10000)
+                            R[m_rd] = R[m_rd] | (R[m_rn] & 0xff) ;
+                        else
+                            R[m_rd] = R[m_rd] | (R[m_rm] & 0xff) ;
+
+                        if(CPSR & 0x20000)
+                            R[m_rd] = R[m_rd] | (R[m_rn] & 0xff00) ;
+                        else
+                            R[m_rd] = R[m_rd] | (R[m_rm] & 0xff00) ;
+
+                        if(CPSR & 0x40000)
+                            R[m_rd] = R[m_rd] | (R[m_rn] & 0xff0000) ;
+                        else
+                            R[m_rd] = R[m_rd] | (R[m_rm] & 0xff0000) ;
+
+                        if(CPSR & 0x80000)
+                            R[m_rd] = R[m_rd] | (R[m_rn] & 0xff000000) ;
+                        else
+                            R[m_rd] = R[m_rd] | (R[m_rm] & 0xff000000) ;
+                    }
                     break;
                 }
             }
 
         } else if(TH_FMT_24(inst)) {
+            inst = inst << 16 ;
+
+            bus.read(R[15], (unsigned char *)&inst,2) ;
+            R[15] = R[15] + 2 ;
+
+            unsigned int m_op = inst & 0x700000 ;
+
+            m_op = m_op >> 20 ;             
+
+            unsigned int m_rn = inst & 0xf0000 ;
+
+            m_rn = m_rn >> 16 ;
+
+            unsigned int m_racc = inst & 0xf000 ;
+
+            m_racc = m_racc >> 12 ;
+
+            unsigned int m_rd = inst & 0xf00 ;
+
+            m_rd = m_rd >> 8 ;
+
+            unsigned int m_rm = inst & 0xf ;
+
+            unsigned int m_op2 = inst & 0xf0 ;
+
+            m_op2 = m_op2 >> 4 ;
+
+            unsigned int m_opPpre = (m_op << 4) | m_op2 ;
+
+            switch(m_opPpre) {
+                case 0b0000000:  //MLA multiply accumilate
+                {
+                    int result = (((int)R[m_rn]) * ((int)R[m_rm])) ;
+
+                    if(m_racc != 0b1111) // only multiply if acc == 0b1111
+                        result = result + (int)R[m_racc] ;
+                    
+                    R[m_rd] = (unsigned int)result ;
+                }
+                break;
+                case 0b0000001:  //MLS multiply and subtract
+                {
+                    if(m_racc != 0b1111) {
+                        int result = (int)R[m_racc] - (((int)R[m_rn]) * ((int)R[m_rm])) ;
+
+                        R[m_rd] = (unsigned int)result ;
+                    }
+                }
+                break;
+                case 0b0010000: //SMLABB, SMLABT, SMLATB, SMLATT
+                case 0b0010001:
+                case 0b0010010:
+                case 0b0010011:
+                {
+                    int m_operand1 = 0;
+                    int m_operand2 = 0;
+
+                    bool m_mbit = (m_op2 & 0b01)?true:false;
+
+                    bool m_nbit = (m_op2 & 0b10)?true:false;
+
+                    if(m_mbit) {
+                        unsigned int m_tmp = ((R[m_rm] & 0xffff0000)>> 16 ) ;
+
+                    if(m_tmp & 0x8000)
+                        m_tmp = m_tmp | 0xffff0000 ;
+
+                        m_operand2 = (int) m_tmp ;
+                    } else {
+                        unsigned int m_tmp = (R[m_rm] & 0xffff) ;
+
+                        if(m_tmp & 0x8000)
+                            m_tmp = m_tmp | 0xffff0000 ;
+
+                        m_operand2 = (int) m_tmp ;
+                    }
+
+                    if(m_nbit) {
+                        unsigned int m_tmp = ((R[m_rn] & 0xffff0000)>> 16 ) ;
+
+                        if(m_tmp & 0x8000)
+                            m_tmp = m_tmp | 0xffff0000 ;
+
+                        m_operand1 = (int) m_tmp ;
+                    } else {
+                        unsigned int m_tmp = (R[m_rn] & 0xffff) ;
+
+                        if(m_tmp & 0x8000)
+                            m_tmp = m_tmp | 0xffff0000 ;
+
+                        m_operand1 = (int) m_tmp ;
+                    }
+
+                    int m_result = m_operand1 * m_operand2 ;
+
+                    if(m_racc != 0b1111)
+                        R[m_rd] = (unsigned int)(m_result + (int)R[m_racc]) ;
+                    else
+                        R[m_rd] = (unsigned int)(m_result) ;
+                }
+                break;
+                case  0b0100000: // Signed dual multiply accumilate add
+                case  0b0100001:
+                {
+                    bool m_mswp= (m_op2 & 0b01)?true:false;
+
+                    int m_operand1 = (int)(R[m_rn]) ;
+                    int m_operand2 = 0 ;
+
+                    if(m_mswp){
+                        m_operand2 = (int)DecodeImmShift(0b11,16,m_rm,false) ;
+                    } else
+                        m_operand2 = (int)(R[m_rm]) ;
+
+                    int m_prod1 = ((m_operand1 << 16) >> 16) * ((m_operand2 << 16) >> 16) ;
+                    int m_prod2 = ((m_operand1 & 0xffff0000) >> 16) * ((m_operand2 & 0xffff0000) >> 16) ;
+
+                    if(m_racc != 0b1111)
+                        R[m_rd] = (unsigned int)( m_prod1 + m_prod2 + (int)R[m_racc]) ;
+                    else
+                        R[m_rd] = (unsigned int)( m_prod1 + m_prod2 ) ;
+
+                }
+                break;
+                case 0b0110000:
+                case 0b0110001: //Signed 32 + 16 x 32-bit, most significant word
+                {
+                    bool m_mset = (m_op2 & 0b01)?true:false ;
+
+                    long int m_res = 0 ;
+
+                    int m_operand1 = 0 ;
+
+                    int m_operand2 = 0 ;
+
+                    if(m_mset)
+                        m_operand2 = (((int)R[m_rm]) >> 16) ;
+                    else
+                        m_operand2 = (((int)R[m_rm]) << 16) >> 16 ;
+
+                    if(m_racc != 0b1111)
+                        m_res = ((int)R[m_rn] * m_operand2) + (((int)R[m_racc]) << 16 ) ;
+                    else
+                        m_res = ((int)R[m_rn] * m_operand2) ;
+
+                    R[m_rd] = (unsigned int)(m_res >> 16) ;
+                }
+                break;
+                case 0b1000000: // Signed Dual Multiply Subtract and Accumulate
+                case 0b1000001:
+                {
+                    bool m_mset = (m_op2 & 0b01)?true:false ;
+
+                    int m_res = 0 ;
+
+                    int m_operand2 = 0 ;
+
+                    if(m_mset)
+                        m_operand2 = (int)DecodeImmShift(0b11,16,m_rm,false) ;
+                    else
+                        m_operand2 = (int)R[m_rm] ;
+
+                    if(m_racc != 0b1111) {
+                        m_res = (((((int)R[m_rn]) << 16) >> 16) * ((m_operand2 << 16) >> 16))  \
+                              - ((((int)R[m_rn]) >> 16) * (m_operand2 >> 16)) \
+                              + ((int)R[m_racc]) ;
+                    } else {
+                        m_res = ((int)R[m_rn] * m_operand2) ;
+                    }
+
+                    R[m_rd] = (unsigned int)(m_res) ;
+                }
+                break;
+                case 0b1010000: // Signed 32 + 32 x 32-bit, most significant word
+                case 0b1010001:
+                {
+                    bool m_rset = (m_op2 & 0b01)?true:false ;
+
+                    long int m_res = (int)R[m_rn] * (int)R[m_rm] ;
+
+                    if(m_rset)
+                        m_res = m_res + 0x80000000 ;
+
+                    if(m_racc != 0b1111)
+                        m_res = (((int)R[m_racc]) << 16 ) + m_res ;
+
+                    R[m_rd] = (unsigned int) (m_res >> 32) ;
+                }
+                break;
+                case 0b1100000: // Signed 32 – 32 x 32-bit, most significant word
+                case 0b1100001:
+                {
+                    bool m_rset = (m_op2 & 0b01)?true:false ;
+
+                    long int m_res = (int)R[m_rn] * (int)R[m_rm] ;
+
+                    if(m_rset)
+                        m_res = m_res + 0x80000000 ;
+
+                    if(m_racc != 0b1111)
+                        m_res = (((int)R[m_racc]) << 16 ) - m_res ;
+
+                    R[m_rd] = (unsigned int) (m_res >> 32) ;
+                }
+                break;
+                case 0b1110000: // USAD8 or USADA8
+                {
+                    R[m_rd] = R[m_rd] | (unsigned int)((int)(R[m_rn] & 0xff) - (int)(R[m_rm] & 0xff)) ;
+                    R[m_rd] = R[m_rd] | (unsigned int)((((int)(R[m_rn] & 0xff00) - (int)(R[m_rm] & 0xff00)) >> 8) << 8) ;
+                    R[m_rd] = R[m_rd] | (unsigned int)((((int)(R[m_rn] & 0xff0000) - (int)(R[m_rm] & 0xff0000)) >> 16) << 16) ;
+                    R[m_rd] = R[m_rd] | (unsigned int)((((int)(R[m_rn] & 0xff000000) - (int)(R[m_rm] & 0xff000000)) >> 24) << 24) ;
+                    
+                    if(m_racc != 0b1111)
+                        R[m_rd] = R[m_rd] + R[m_racc] ;
+                }
+                break;
+            }
+
         } else if(TH_FMT_25(inst)) {
+
+            inst = inst << 16 ;
+
+            bus.read(R[15], (unsigned char *)&inst,2) ;
+            R[15] = R[15] + 2 ;
+
+            unsigned int m_op = inst & 0x700000 ;
+
+            m_op = m_op >> 20 ;             
+
+            unsigned int m_rn = inst & 0xf0000 ;
+
+            m_rn = m_rn >> 16 ;
+
+            unsigned int m_rdLo = inst & 0xf000 ;
+
+            m_rdLo = m_rdLo >> 12 ;
+
+            unsigned int m_rdHi = inst & 0xf00 ;
+
+            m_rdHi = m_rdHi >> 8 ;
+
+            unsigned int m_rm = inst & 0xf ;
+
+            unsigned int m_op2 = inst & 0xf0 ;
+
+            m_op2 = m_op2 >> 4 ;
+
+            unsigned int m_opPpre = (m_op << 4) | m_op2 ;
+
+            switch(m_opPpre) {
+                case 0b0000000: // signed 32 x 32
+                {
+                    long int m_res = ((int)R[m_rn]) * ((int)R[m_rm]) ;
+
+                    R[m_rdHi] = (unsigned int)(m_res >> 32) ;
+
+                    R[m_rdLo] = (unsigned int)(m_res) ;
+                }
+                break;
+                case 0b0011111: // Signed divide
+                {
+                    if((int)R[m_rm]== 0) {
+                        R[m_rdLo] = 0;
+                    } else {
+                        R[m_rdLo] = (unsigned int)(((int)R[m_rn]) / ((int)R[m_rm])) ;
+                    }
+                }
+                break;
+                case 0b0100000: // Unsigned 32 x 32
+                {
+                    unsigned long int m_res = R[m_rn] * R[m_rm] ;
+
+                    R[m_rdHi] = (unsigned int)(m_res >> 32) ;
+
+                    R[m_rdLo] = (unsigned int)(m_res) ;
+                }
+                break;
+                case 0b0111111: // Unsigned divide
+                {
+                    if(R[m_rm]== 0) {
+                        R[m_rdLo] = 0;
+                    } else {
+                        R[m_rdLo] = R[m_rn] / R[m_rm] ;
+                    }
+                }
+                break;
+                case 0b1000000: // Signed 64 + 32 x 32
+                {
+                    unsigned long m_operand = R[m_rdHi] ;
+                    
+                    m_operand = m_operand << 32 ;
+
+                    long int m_add = (int)(m_operand | R[m_rdLo]) ;
+
+                    long int m_res = ((int)R[m_rn]) * ((int)R[m_rm]) ;
+
+                    m_res = m_res + m_add ;
+
+                    R[m_rdHi] = (unsigned int)(m_res >> 32) ;
+
+                    R[m_rdLo] = (unsigned int)(m_res) ;
+                }
+                break;
+                case 0b1001000: // Signed 64 + 16 x 16
+                case 0b1001001:
+                case 0b1001010:
+                case 0b1001011:
+                {
+
+                }
+                break;
+            }
+
         } else {
             //processor_busy = false;
             //clear flags set by previous inst
