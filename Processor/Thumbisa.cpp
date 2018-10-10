@@ -3029,7 +3029,116 @@
                 case 0b1001010:
                 case 0b1001011:
                 {
+                    bool m_mset = (m_op2 & 0b01)?true:false ;
 
+                    bool m_nset = (m_op2 & 0b10)?true:false ;
+
+                    int m_operand1 = 0 ;
+
+                    int m_operand2 = 0 ;
+
+                    if(m_nset)
+                        m_operand1 = (int)(R[m_rn]) >> 16 ;
+                    else
+                        m_operand1 = ((int)(R[m_rn]) << 16) >> 16 ;
+
+                    if(m_mset)
+                        m_operand2 = (int)(R[m_rm]) >> 16 ;
+                    else
+                        m_operand2 = ((int)(R[m_rm]) << 16) >> 16 ;
+
+                    long int m_res = (int)R[m_rdHi] ;
+
+                    m_res = m_res << 32 ;
+
+                    m_res = m_res | R[m_rdLo] ;
+                    
+                    m_res = m_res + (m_operand1 * m_operand2) ;
+
+                    R[m_rdHi] = (unsigned int) (m_res >> 32) ;
+
+                    R[m_rdLo] = (unsigned int) ((m_res << 32) >> 32) ;
+
+                }
+                break;
+                case 0b1001100: // Signed Multiply Accumulate Long Dual
+                case 0b1001101:
+                {
+                    bool m_mswp = (m_op2 & 0b01)?true:false ;
+
+                    int m_operand2 = 0 ;
+
+                    if(m_mswp)
+                        m_operand2 = (int)DecodeImmShift(0b11,16,m_rm,false) ;
+
+                    int m_prod1 = (((int)R[m_rn] << 16) >> 16) * ((m_operand2 << 16) >> 16) ;
+                    int m_prod2 = (((int)R[m_rn]) >> 16) * ((m_operand2) >> 16) ;
+
+                    long int m_res = (int)R[m_rdHi] ;
+
+                    m_res = m_res << 32 ;
+
+                    m_res = m_res | R[m_rdLo] ;
+
+                    m_res = m_res + m_prod1 + m_prod2 ;
+
+                    R[m_rdHi] = (unsigned int)(m_res >> 32) ;
+
+                    R[m_rdLo] = (unsigned int)(m_res) ;
+                }
+                break;
+                case 0b1011100: // Signed Multiply Subtract accumulate Long Dual
+                case 0b1011101:
+                {
+                    bool m_mswp = (m_op2 & 0b01)?true:false ;
+
+                    int m_operand2 = 0 ;
+
+                    if(m_mswp)
+                        m_operand2 = (int)DecodeImmShift(0b11,16,m_rm,false) ;
+
+                    int m_prod1 = (((int)R[m_rn] << 16) >> 16) * ((m_operand2 << 16) >> 16) ;
+                    int m_prod2 = (((int)R[m_rn]) >> 16) * ((m_operand2) >> 16) ;
+
+                    long int m_res = (int)R[m_rdHi] ;
+
+                    m_res = m_res << 32 ;
+
+                    m_res = m_res | R[m_rdLo] ;
+
+                    m_res = m_res + m_prod1 - m_prod2 ;
+
+                    R[m_rdHi] = (unsigned int)(m_res >> 32) ;
+
+                    R[m_rdLo] = (unsigned int)(m_res) ;
+                }
+                break;
+                case 0b1100000: // Unsigned 64 + 32 x 32
+                {
+                    unsigned long int m_res = R[m_rdHi] ;
+
+                    m_res = m_res << 32 ;
+
+                    m_res = m_res | R[m_rdLo] ;
+
+                    m_res = (R[m_rn] * R[m_rm]) + m_res ;
+
+                    R[m_rdHi] = m_res >> 32 ;
+
+                    R[m_rdLo] = m_res ;
+                }
+                break;
+                case 0b1100110: // Unsigned 32 + 32 + 32 x 32
+                {
+                    unsigned long int m_res = R[m_rdHi] ;
+
+                    m_res = m_res + R[m_rdLo] ;
+
+                    m_res = (R[m_rn] * R[m_rm]) + m_res ;
+
+                    R[m_rdHi] = m_res >> 32 ;
+
+                    R[m_rdLo] = m_res ;
                 }
                 break;
             }
