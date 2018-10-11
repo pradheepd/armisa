@@ -3143,6 +3143,95 @@
                 break;
             }
 
+        } else if(TH_FMT_26(inst)) {
+
+            inst = inst << 16 ;
+
+            bus.read(R[15], (unsigned char *)&inst,2) ;
+            R[15] = R[15] + 2 ;
+
+            bool m_sbit = (inst & 0x01000000)?true:false;
+
+            bool m_ubit = (inst & 0x00800000)?true:false;
+
+            bool m_lbit = (inst & 0x00100000)?true:false;
+
+            unsigned int m_size = inst & 0x00600000 ;
+
+            unsigned int m_rn = inst & 0x000f0000 ;
+
+            m_rn = m_rn >> 16 ;
+
+            unsigned int m_rt = inst & 0x000f0000 ;
+
+            m_rn = m_rn >> 12 ;
+
+            m_size = m_size >> 21 ;
+
+            if(m_lbit && (m_ubit || (m_rn == 0b1111)) ) { // load relative offset
+                
+                unsigned int m_immi12 = inst & 0xfff ;
+
+                if(m_ubit)
+                    m_immi12 = R[m_rn] + m_immi12 ;
+                else
+                    m_immi12 = R[m_rn] - m_immi12 ;
+
+                switch (m_size) {
+                    
+                    case 0b00: // byte transfer
+                    {
+                        bus.read(m_immi12,(unsigned char *)&R[m_rt], 1) ;
+
+                        if(m_sbit && (R[m_rt] & 0x80))
+                            R[m_rt] = R[m_rt] | 0xffffff00 ;
+                        else
+                            R[m_rt] = R[m_rt] & 0x000000ff ;
+                    }
+                    break;
+                    case 0b01: // halfword transfer
+                    {
+                        bus.read(m_immi12,(unsigned char *)&R[m_rt], 2) ;
+                        
+                        if(m_sbit && (R[m_rt] & 0x8000))
+                            R[m_rt] = R[m_rt] | 0xffff0000 ;
+                        else
+                            R[m_rt] = R[m_rt] & 0x0000ffff ;
+                    }
+                    break;
+                    case 0b10: // word transfer
+                    {
+                        bus.read(m_immi12,(unsigned char *)&R[m_rt], 4) ;
+                    }
+                    break;
+                }
+            } else if( !m_lbit && m_ubit ) { // load relative offset
+                unsigned int m_immi12 = inst & 0xfff ;
+
+                m_immi12 = R[m_rn] + m_immi12 ;
+
+                switch (m_size) {
+                    
+                    case 0b00: // byte transfer
+                    {
+                        bus.write(m_immi12,(unsigned char *)&R[m_rt], 1) ;
+                    }
+                    break;
+                    case 0b01: // halfword transfer
+                    {
+                        bus.write(m_immi12,(unsigned char *)&R[m_rt], 2) ;
+                    }
+                    break;
+                    case 0b10: // word transfer
+                    {
+                        bus.write(m_immi12,(unsigned char *)&R[m_rt], 4) ;
+                    }
+                    break;
+                }
+            } else if(!m_ubit){
+                
+            }
+
         } else {
             //processor_busy = false;
             //clear flags set by previous inst
