@@ -3453,17 +3453,26 @@
                     break;
                     case 0b0000:
                     {
+                        unsigned int addr = 0 ;
+                        bus.read(R[m_rn]+R[m_rm], (unsigned char *)&addr, 1) ;
 
+                        R[15] = R[15] + addr ;
                     }
                     break;
                     case 0b0001:
                     {
+                        unsigned int addr = 0 ;
+                        bus.read(R[m_rn]+(R[m_rm] << 1), (unsigned char *)&addr, 2) ;
 
+                        R[15] = R[15] + addr ;
                     }
                     break;
                 }
             }
 
+        } else if(TH_FMT_28(inst)) {
+
+            
         } else {
             //processor_busy = false;
             //clear flags set by previous inst

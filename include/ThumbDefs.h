@@ -64,3 +64,5 @@
 #define TH_FMT_26(a) ((((B15 | B14 | B13 | B12 | B11 | B10 | B09 ) & a) == 0xf800)?true:false)
 
 #define TH_FMT_27(a) ((((B15 | B14 | B13 | B12 | B11 | B10 | B09 | B06) & a) == 0xe840)?true:false)
+
+#define TH_FMT_28(a) ((((B15 | B14 | B13 | B12 | B11 | B10 | B09 | B06) & a) == 0xe800)?true:false)
