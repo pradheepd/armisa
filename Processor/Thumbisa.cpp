@@ -3229,7 +3229,239 @@
                     break;
                 }
             } else if(!m_ubit){
+
+                unsigned int m_op = inst & 0xf00 ;
+
+                m_op = m_op >> 8 ;
+
+                unsigned int m_addr = R[m_rn] ;
+
+                unsigned int m_immi8 = inst & 0xff ;
+
+                bool m_pre = false ;
+
+                bool m_post = false ;
+
+                switch(m_op) {
+                    case 0b1100: // rn - immi8
+                    {
+                        m_addr = m_addr - m_immi8 ;
+                    }
+                    break;
+                    case 0b1110: // rn + immi8, user previlage
+                    {
+                        m_addr = m_addr + m_immi8 ;
+                    }
+                    break;
+                    case 0b1001: // rn post-indexed by - immi8
+                    {
+                        m_addr = m_addr - m_immi8 ;
+
+                        m_post = true ;
+                    }
+                    break;
+                    case 0b1011: // rn post-indexed by + immi8
+                    {
+                        m_addr = m_addr + m_immi8 ;
+
+                        m_post = true ;
+                    }
+                    break;
+                    case 0b1101: // rn pre-indexed by - immi8
+                    {
+                        m_addr = m_addr - m_immi8 ;
+
+                        m_pre = true ;
+                    }
+                    break;
+                    case 0b1111: // rn pre-indexed by + immi8
+                    {
+                        m_addr = m_addr + m_immi8 ;
+
+                        m_pre = true ;
+                    }
+                    break;
+                    case 0b0000: // rn + shifted register
+                    {
+                        unsigned int m_shft = m_immi8 & 0xf0;
+
+                        m_shft = m_shft >> 4 ;
+
+                        m_shft = DecodeImmShift(0b00,m_shft, R[m_immi8 & 0x0f],false) ;
+
+                        m_addr = m_addr + m_shft ;
+                    }
+                    break;
+                }
+
+                if(m_pre)
+                    R[m_rn] = m_addr ;
+
+                if(m_lbit) {    // load operation
+
+                    switch (m_size) {
+                    
+                        case 0b00: // byte transfer
+                        {
+                            bus.read(m_addr,(unsigned char *)&R[m_rt], 1) ;
+
+                            if(m_sbit && (R[m_rt] & 0x80))
+                                R[m_rt] = R[m_rt] | 0xffffff00 ;
+                            else
+                                R[m_rt] = R[m_rt] & 0x000000ff ;
+                        }
+                        break;
+                        case 0b01: // halfword transfer
+                        {
+                            bus.read(m_addr,(unsigned char *)&R[m_rt], 2) ;
+                            
+                            if(m_sbit && (R[m_rt] & 0x8000))
+                                R[m_rt] = R[m_rt] | 0xffff0000 ;
+                            else
+                                R[m_rt] = R[m_rt] & 0x0000ffff ;
+                        }
+                        break;
+                        case 0b10: // word transfer
+                        {
+                            bus.read(m_addr,(unsigned char *)&R[m_rt], 4) ;
+                        }
+                        break;
+                    }
+                } else {        // store operation
+                    switch (m_size) {
+                    
+                        case 0b00: // byte transfer
+                        {
+                            bus.write(m_addr,(unsigned char *)&R[m_rt], 1) ;
+                        }
+                        break;
+                        case 0b01: // halfword transfer
+                        {
+                            bus.write(m_addr,(unsigned char *)&R[m_rt], 2) ;
+                        }
+                        break;
+                        case 0b10: // word transfer
+                        {
+                            bus.write(m_addr,(unsigned char *)&R[m_rt], 4) ;
+                        }
+                        break;
+                    }
+                }
+
+                if(m_post)
+                    R[m_rn] = m_addr ;
+            }
+
+        } else if(TH_FMT_27(inst)) {
+
+            inst = inst << 16 ;
+
+            bus.read(R[15], (unsigned char *)&inst,2) ;
+            R[15] = R[15] + 2 ;
+
+            bool m_pbit = (inst & 0x01000000)?true:false ;
+
+            bool m_ubit = (inst & 0x00800000)?true:false ;
+
+            bool m_wbit = (inst & 0x00200000)?true:false ;
+
+            bool m_lbit = (inst & 0x00100000)?true:false ;
+
+            unsigned int m_rn = inst & 0xf0000 ;
+
+            m_rn = m_rn >> 16 ;
+
+            unsigned int m_rt = inst & 0xf000 ;
+
+            m_rt = m_rt >> 12 ;
+
+            unsigned int m_rt2 = inst & 0xf00 ;
+
+            m_rt2 = m_rt2 >> 8 ;
+
+            if(m_pbit || m_wbit) { // load or store double
+
+                unsigned int m_imm8 = inst & 0xff ;
+
+                if(m_ubit)
+                    m_imm8 = R[m_rn] + m_imm8 ;
+                else
+                    m_imm8 = R[m_rn] - m_imm8 ;
+
+                if(m_wbit && m_pbit)
+                    R[m_rn] = m_imm8 ;
+
+                if(m_lbit){
+                    bus.read(m_imm8, (unsigned char *)&R[m_rt], 4);
+                    bus.read(m_imm8, (unsigned char *)&R[m_rt2], 4);
+                } else {
+                    bus.write(m_imm8, (unsigned char *)&R[m_rt], 4);
+                    bus.write(m_imm8, (unsigned char *)&R[m_rt2], 4);
+                }
+
+                if(m_wbit && !m_pbit)
+                    R[m_rn] = m_imm8 ;
+
+            } else if (!m_ubit && (m_rt2 == 0b1111)) {  // load or store exclusive
+
+                unsigned int m_imm8 = inst & 0xff ;
                 
+                m_imm8 = R[m_rn] + m_imm8 ;
+
+                if(m_lbit)
+                    bus.read(m_imm8, (unsigned char*)&R[m_rt], 4);
+                else
+                    bus.write(m_imm8, (unsigned char *)&R[m_rt], 4);
+
+            } else {               // load or store exclusive byte, halfword, doubleword and table branch
+
+                unsigned int m_op = inst & 0xf0 ;
+
+                m_op = m_op >> 4 ;
+
+                unsigned int m_rm = inst & 0x0f ;
+
+                switch (m_op) {
+                    case 0b0100:
+                    {
+                        if(m_lbit){
+                            bus.read(R[m_rn], (unsigned char *)&R[m_rt], 1);
+                            R[m_rt] = R[m_rt] & 0xff ;
+                        } else
+                            bus.write(R[m_rn], (unsigned char *)&R[m_rt], 1);
+                    }
+                    break;
+                    case 0b0101:
+                    {
+                        if(m_lbit){
+                            bus.read(R[m_rn], (unsigned char *)&R[m_rt], 2);
+                            R[m_rt] = R[m_rt] & 0xffff ;
+                        } else
+                            bus.write(R[m_rn], (unsigned char *)&R[m_rt], 2);
+                    }
+                    break;
+                    case 0b0111:
+                    {
+                        if(m_lbit){
+                            bus.read(R[m_rn], (unsigned char *)&R[m_rt], 4);
+                            bus.read(R[m_rn], (unsigned char *)&R[m_rt2], 4);
+                        } else {
+                            bus.write(R[m_rn], (unsigned char *)&R[m_rt], 4);
+                            bus.write(R[m_rn], (unsigned char *)&R[m_rt2], 4);
+                        }
+                    }
+                    break;
+                    case 0b0000:
+                    {
+
+                    }
+                    break;
+                    case 0b0001:
+                    {
+
+                    }
+                    break;
+                }
             }
 
         } else {

@@ -9,6 +9,7 @@
 #define B09 0b0000001000000000
 #define B08 0b0000000100000000
 #define B07 0b0000000010000000
+#define B06 0b0000000001000000
 
 #define TH_FMT_02(a) ((((B15 | B14 | B13 | B12 | B11 | B10) & a) == 0x1c00)?true:false)
 
@@ -61,3 +62,5 @@
 #define TH_FMT_25(a) ((((B15 | B14 | B13 | B12 | B11 | B10 | B09 | B08 | B07) & a) == 0xfb10)?true:false)
 
 #define TH_FMT_26(a) ((((B15 | B14 | B13 | B12 | B11 | B10 | B09 ) & a) == 0xf800)?true:false)
+
+#define TH_FMT_27(a) ((((B15 | B14 | B13 | B12 | B11 | B10 | B09 | B06) & a) == 0xe840)?true:false)
