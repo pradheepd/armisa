@@ -1,4 +1,4 @@
-# Install script for directory: /home/pradeep/Desktop/systemc_test/BUS
+# Install script for directory: /home/pradeep/Desktop/ARMISA/armisa/BUS
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/pradeep/Desktop/systemc_test/BUS/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/pradeep/Desktop/ARMISA/armisa/BUS/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

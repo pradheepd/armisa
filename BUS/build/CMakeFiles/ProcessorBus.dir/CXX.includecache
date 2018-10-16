@@ -6,15 +6,15 @@
 
 #IncludeRegexTransform: 
 
+../../include/ProcessorBus.h
+systemc.h
+../../include/systemc.h
+
 ../inc/BusTop.h
 SimpleInitTarg.h
 ../inc/SimpleInitTarg.h
 map
 -
-
-../inc/ProcessorBus.h
-systemc.h
-../inc/systemc.h
 
 ../inc/SimpleInitTarg.h
 systemc.h
@@ -32,23 +32,23 @@ tlm_utils/peq_with_get.h
 ProcessorBus.h
 ../inc/ProcessorBus.h
 
-/home/pradeep/Desktop/systemc_test/BUS/src/BusMaster.cpp
+/home/pradeep/Desktop/ARMISA/armisa/BUS/src/BusMaster.cpp
 BusTop.h
-/home/pradeep/Desktop/systemc_test/BUS/src/BusTop.h
+/home/pradeep/Desktop/ARMISA/armisa/BUS/src/BusTop.h
 
-/home/pradeep/Desktop/systemc_test/BUS/src/BusSlave.cpp
+/home/pradeep/Desktop/ARMISA/armisa/BUS/src/BusSlave.cpp
 BusTop.h
-/home/pradeep/Desktop/systemc_test/BUS/src/BusTop.h
+/home/pradeep/Desktop/ARMISA/armisa/BUS/src/BusTop.h
 
-/home/pradeep/Desktop/systemc_test/BUS/src/BusTop.cpp
+/home/pradeep/Desktop/ARMISA/armisa/BUS/src/BusTop.cpp
 BusTop.h
-/home/pradeep/Desktop/systemc_test/BUS/src/BusTop.h
+/home/pradeep/Desktop/ARMISA/armisa/BUS/src/BusTop.h
 string.h
-/home/pradeep/Desktop/systemc_test/BUS/src/string.h
+/home/pradeep/Desktop/ARMISA/armisa/BUS/src/string.h
 
-/home/pradeep/Desktop/systemc_test/BUS/src/SimpleInitTarg.cpp
+/home/pradeep/Desktop/ARMISA/armisa/BUS/src/SimpleInitTarg.cpp
 SimpleInitTarg.h
-/home/pradeep/Desktop/systemc_test/BUS/src/SimpleInitTarg.h
+/home/pradeep/Desktop/ARMISA/armisa/BUS/src/SimpleInitTarg.h
 
 /usr/local/systemc/include/sysc/communication/sc_buffer.h
 sysc/communication/sc_signal.h

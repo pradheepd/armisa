@@ -3472,7 +3472,55 @@
 
         } else if(TH_FMT_28(inst)) {
 
-            
+            inst = inst << 16 ;
+
+            bus.read(R[15], (unsigned char *)&inst,2) ;
+            R[15] = R[15] + 2 ;
+
+            bool m_vbit = (inst & 0x01000000)?true:false ;
+
+            bool m_ubit = (inst & 0x00800000)?true:false ;
+
+            bool m_wbit = (inst & 0x00200000)?true:false ;
+
+            bool m_lbit = (inst & 0x00100000)?true:false ;
+
+            unsigned int m_rn = inst & 0xf0000 ;
+
+            m_rn = m_rn >> 16 ;
+
+            if(m_vbit != m_ubit) { // load and store multiple increment before/after PUSH and POP
+
+                unsigned int m_addr = 0 ;
+
+                unsigned int m_mask = inst & 0xffff ;
+
+                unsigned int m_count = 0 ;
+
+                for(int m_i=0; m_i < 16 ; m_i++){
+                    if(m_mask & 0x1)
+                        m_count++;
+                    
+                    m_mask = m_mask >> 1 ;
+                }
+
+                if(m_ubit)
+                    m_addr = R[m_rn] - 4*m_count ;
+
+                if(!(m_mask & (0x1 << m_rn)))
+                    R[m_rn] = m_addr ;
+
+                for(int m_i=0; m_i < 16 ; m_i++){
+                    if(m_mask & 0x1)
+                        m_count++;
+                    
+                    m_mask = m_mask >> 1 ;
+                }
+
+            } else { // RFE and SRS
+
+            }
+
         } else {
             //processor_busy = false;
             //clear flags set by previous inst

@@ -8,6 +8,8 @@ include_directories("/usr/local/systemc/include/")
 
 include_directories("${CMAKE_CURRENT_LIST_DIR}/inc")
 
+include_directories("${CMAKE_CURRENT_LIST_DIR}/../include")
+
 link_directories("/usr/local/systemc/lib-linux64/")
 
 add_library(ProcessorBus ${CMAKE_CURRENT_LIST_DIR}/src/SimpleInitTarg.cpp ${CMAKE_CURRENT_LIST_DIR}/src/BusTop.cpp ${CMAKE_CURRENT_LIST_DIR}/src/BusMaster.cpp ${CMAKE_CURRENT_LIST_DIR}/src/BusSlave.cpp )

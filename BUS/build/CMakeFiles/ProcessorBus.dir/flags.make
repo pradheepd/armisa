@@ -6,5 +6,5 @@ CXX_FLAGS =  -g
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/usr/local/systemc/include -I/home/pradeep/Desktop/systemc_test/BUS/inc 
+CXX_INCLUDES = -I/usr/local/systemc/include -I/home/pradeep/Desktop/ARMISA/armisa/BUS/inc -I/home/pradeep/Desktop/ARMISA/armisa/BUS/../include 
 
