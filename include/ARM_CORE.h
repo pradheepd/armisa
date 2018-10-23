@@ -92,6 +92,15 @@
 #define COND_LE 0b1011
 #define COND_AL 0b0111
 
+#define PMODE_USER	        0b10000
+#define PMODE_FIQ           0b10001
+#define PMODE_IRQ           0b10010
+#define PMODE_SVC           0b10011
+#define PMODE_ABRT          0b10111
+#define PMODE_UNDEF         0b11011
+#define PMODE_SYS           0b11111
+#define PMODE_MON           0b10110
+
 //Data processing instructions
 /*
  0000 = AND - Rd:= Op1 AND Op2

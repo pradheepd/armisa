@@ -1757,6 +1757,79 @@
                     }
                     break;
                 }
+            } else if(inst & 0x8000) {         // Branches, miscellaneous control instructions
+
+                if(inst & 0x4000){             // BL BLX
+
+                    unsigned int m_immi = (inst & 0x7ff) << 1 ;
+
+                    m_immi = m_immi | ((inst & 0x03ff) >> 5) ;
+
+                    if(inst & 0x800)
+                        m_immi = m_immi | 0x400000 ;
+
+                    if(inst & 0x4000)
+                        m_immi = m_immi | 0x800000 ;
+
+                    if(inst & 0x4000000 )
+                        m_immi = m_immi | 0xff000000 ;
+
+                    R[15] = R[15] + (int) m_immi ;
+
+                    if(inst & 0x1000)
+                        b_thumb = true ;
+                    else
+                        b_thumb = false ;
+
+                    R[14] = R[15] | 0x1 ;          // set LR
+
+                    R[15] = R[15] + (int) m_immi ; // Jump to addr
+
+                } else {
+
+                    if(inst & 0x1000) {        // Branch
+
+                        unsigned int m_immi = inst & 0x7ff ;
+
+                        if(inst & 0x1000){
+
+                            m_immi = m_immi | ((inst & 0x3ff0000) >> 5) ;
+
+                            if(inst & 0x2000 )
+                                m_immi = m_immi | 0x200000 ;
+                            
+                            if(inst & 0x800 )
+                                m_immi = m_immi | 0x400000 ;
+
+                            if(inst & 0x4000000 )
+                                m_immi = m_immi | 0xff800000 ;
+
+                            R[15] = R[15] + (int)m_immi ;
+
+                        } else {
+
+                            m_immi = m_immi | ((inst & 0x3f0000) >> 5) ;
+
+                            if(inst & 0x2000 )
+                                m_immi = m_immi | 0x20000 ;
+                            
+                            if(inst & 0x800 )
+                                m_immi = m_immi | 0x40000 ;
+
+                            if(inst & 0x4000000 )
+                                m_immi = m_immi | 0xfff80000 ;
+
+                            unsigned int m_cond = inst & 0x03c00000 ;
+
+                            m_cond = m_cond >> 22 ;
+
+                            if(CheckCondCodes(m_cond)){
+                                R[15] = R[15] + (int)m_immi ;
+                            }
+
+                        }
+                    }
+                }
             }
         } else if(TH_FMT_21(inst)) {
                 inst = inst << 16 ;
@@ -3504,21 +3577,63 @@
                     m_mask = m_mask >> 1 ;
                 }
 
-                if(m_ubit)
+                if(!m_ubit && (m_rn != 13))
                     m_addr = R[m_rn] - 4*m_count ;
+                else
+                    m_addr = R[m_rn] ;
 
-                if(!(m_mask & (0x1 << m_rn)))
-                    R[m_rn] = m_addr ;
+                if(m_lbit) {
 
-                for(int m_i=0; m_i < 16 ; m_i++){
-                    if(m_mask & 0x1)
-                        m_count++;
+                    if(!(m_mask & (0x1 << m_rn)) && m_wbit ) {
+
+                        if(!m_ubit && (m_rn != 13))
+                            R[m_rn] = R[m_rn] - 4*m_count ;
+                        else
+                            R[m_rn] = R[m_rn] + 4*m_count ;
+                            
+                    }
                     
-                    m_mask = m_mask >> 1 ;
+                    for(int m_i=0; m_i < 16 ; m_i++) {
+                        
+                        if(m_mask & 0x1) {
+                            
+                            bus.read(m_addr,(unsigned char *)&R[m_i],4) ;
+
+                            m_addr = m_addr + 4 ;
+                        }
+                        m_mask = m_mask >> 1 ;
+                    }                    
+
+                } else {
+
+                    if(!(m_mask & (0x1 << m_rn)) && m_wbit ) {
+
+                        if(!m_ubit)
+                            R[m_rn] = R[m_rn] - 4*m_count ;
+                        else
+                            R[m_rn] = R[m_rn] + 4*m_count ;
+                            
+                    }
+
+                    for(int m_i=0; m_i < 16 ; m_i++) {
+                        
+                        if(m_mask & 0x1) {
+                            
+                            bus.write(m_addr,(unsigned char *)&R[m_i],4) ;
+
+                            m_addr = m_addr + 4 ;
+                        }
+                        m_mask = m_mask >> 1 ;
+                    }
                 }
 
             } else { // RFE and SRS
+                
+                if(!m_lbit && (m_rn == 13)){            // SRS
 
+                } else {                                // RFE
+
+                }
             }
 
         } else {
